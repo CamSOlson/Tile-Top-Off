@@ -1,0 +1,84 @@
+body{
+	background-color: Black;
+	padding: 0;
+	margin: 0;
+	font-family: sans-serif;
+}
+main#game{
+	margin: 0;
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	overflow: hidden;
+}
+#game>h1{
+	color: White;
+}
+a.tile{
+	display: block;
+}
+section#board{
+	width: 90vw;
+	height: 90vw;
+}
+@media (orientation: landscape){
+	section#board{
+		width: 90vh;
+		height: 90vh;
+	}
+}
+div#tiles{
+	width: 100%;
+	height: 100%;
+	display: grid;
+	background-color: #333333;
+}
+div#status{
+	transition: opacity 0.25s;
+
+	position: relative;
+	top: -100%;
+	background-color: rgba(0.5, 0.5, 0.5, 0.5);
+	width: 100%;
+	height: 100%;
+	text-align: center;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	flex-wrap: wrap;
+}
+a#statusMain{	
+	transition: margin-top 0.25s;
+	text-align: center;
+	font-style: italic;
+	color: White;
+	font-weight: bold;
+	font-size: 2rem;
+}
+a#statusSub{
+	transition: padding-top 0.25s;
+	text-align: center;
+	font-style: italic;
+	color: White;
+	font-weight: normal;
+	font-size: 1rem;
+}
+a#statusMain.status_hidden, a#statusSub.status_hidden{
+	padding-top: 100%;
+}
+a#statusMain.status_shown, a#statusSub.status_shown{
+	padding-top: 0;
+}
+a{
+	color: White;
+}
+.status_hidden{
+	opacity: 0;
+}
+.status_shown{
+	opacity: 1;
+}
