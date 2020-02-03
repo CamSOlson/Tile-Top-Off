@@ -104,6 +104,12 @@ function resetGame(){
 	tiles[startPos[0]][startPos[1]].style.backgroundColor = playerTileColor;
 	playerTile = tiles[startPos[0]][startPos[1]];
 	tilesFilled = 0;
+	//Turn off any state variables
+	blockInput = false;
+	gameOver = false;
+	transition = false;
+	starting = false;
+	hideStatus();
 }
 
 function initLocalStorage(){
@@ -216,6 +222,7 @@ function update(key){
 	if (!blockInput){
 		if (gameOver && !transition){
 			if (key == "38" || key == "40" || key == "37" || key == "39" || key == "87" || key == "83" || key == "65" || key == "68") {
+
 				showStart();
 				gameOver = false;
 				loadGame();
