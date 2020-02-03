@@ -27,7 +27,8 @@ var gameOver = false;
 var transition = false;
 var starting = true;
 
-var swipeObject;
+var mainGame;
+var gameBoard;
 
 var localStorage;
 var useLocalStorage = false;
@@ -37,9 +38,22 @@ var blockInput = false;
 window.addEventListener("load", function(){
 	loadGame();
 	
-	swipedetect(swipeObject, function(swipedir){
-        if (swipedir != "none"){
-            switch (swipedir){
+	window.onkeydown = function(e){
+		e = e || window.event;
+		update(e.keyCode);
+	}
+	
+	mainGame.addEventListener("click", function(e){
+		let rect = mainGame.getBoundingClientRect();
+		let scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+		let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+		
+		touchMove(mainGame, e.clientX - rect.left - scrollLeft, e.clientY - rect.top - scrollTop);
+	});
+
+	swipeMovement(mainGame, function(swipeDir){
+        if (swipeDir != "none"){
+            switch (swipeDir){
 				case "up":
 					update(38);
 					break;
@@ -68,7 +82,8 @@ function loadGame(){
 	initBoardSize();
 	initPathComplexity();
 
-	swipeObject = document.querySelector("main#game");
+	mainGame = document.querySelector("main#game");
+	gameBoard = document.querySelector("section#board");
 	
 	showStart();
 	generateTiles();
@@ -147,8 +162,6 @@ function setPathComplexity(amount){
 	pathComplexity = amount;
 }
 
-
-
 function getAdjacentTiles(x, y){
 	let adjTiles = [];
 	//Above
@@ -177,9 +190,26 @@ function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));
 }
 
-window.onkeydown = function(e){
-	e = e || window.event;
-	update(e.keyCode);
+function touchMove(element, x, y){
+	//check if closer to x or y axis
+	if (Math.abs(y - element.offsetHeight / 2) > Math.abs(x - element.offsetWidth / 2)){
+		//Closer to y axis
+		if (y > element.offsetHeight / 2){
+			//down
+			update(40);
+		}else{
+			update(38);
+		}
+	}else{
+		//Closer to x axis
+		if (x > element.offsetWidth / 2){
+			//right
+			update(39);
+		}else{
+			//left
+			update(37);
+		}
+	}
 }
 
 function update(key){
@@ -369,6 +399,8 @@ function showStatus(message, messageColor, sub, subColor, backgroundColor){
 	statusSub.classList.add("status-shown");
 }
 function hideStatus(){
+	statusMain.innerHTML = "";
+	statusSub.innerHTML = "";
 	statusDiv.classList.remove("status-shown");
 	statusDiv.classList.add("status-hidden");
 	statusMain.classList.remove("status-shown");
@@ -377,43 +409,40 @@ function hideStatus(){
 	statusSub.classList.add("status-hidden");
 }
 
-function swipedetect(e, callback){
-  
-    var touchsurface = e, swipedir, startX, startY, distX, distY, 
+function swipeMovement(element, callback){
+	let touchElem = element;
+	let swipeDir, startX, startY, distX, distY, 
 	threshold = 50, //min dist
     restraint = 50, //max deviation
     allowedTime = 300, //max time
-    elapsedTime,
-    startTime,
-    handleswipe = callback || function(swipedir){}
+    elapsedTime, startTime,
+    swipeEvent = callback || function(swipeDir){};
   
-    touchsurface.addEventListener("touchstart", function(e){
+    touchElem.addEventListener("touchstart", function(e){
         let touchobj = e.changedTouches[0];
-        swipedir = "none";
+        swipeDir = "none";
         dist = 0;
         startX = touchobj.pageX;
         startY = touchobj.pageY;
         startTime = new Date().getTime();
-        e.preventDefault();
     });
   
-    touchsurface.addEventListener("touchmove", function(e){e.preventDefault();});
+    touchElem.addEventListener("touchmove", function(e){e.preventDefault();});
   
-    touchsurface.addEventListener("touchend", function(e){
+    touchElem.addEventListener("touchend", function(e){
         var touchobj = e.changedTouches[0]
         distX = touchobj.pageX - startX;
         distY = touchobj.pageY - startY;
         elapsedTime = new Date().getTime() - startTime;
         if (elapsedTime <= allowedTime){
             if (Math.abs(distX) >= threshold && Math.abs(distY) <= restraint){
-                swipedir = (distX < 0)? "left" : "right";
+                swipeDir = (distX < 0)? "left" : "right";
             }
             else if (Math.abs(distY) >= threshold && Math.abs(distX) <= restraint){
-                swipedir = (distY < 0)? "up" : "down";
+                swipeDir = (distY < 0)? "up" : "down";
             }
         }
-        handleswipe(swipedir)
-        e.preventDefault()
+        swipeEvent(swipeDir);
     }, false)
 }
 

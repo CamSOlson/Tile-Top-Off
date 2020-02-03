@@ -102,11 +102,11 @@ section#menu{
 	background-color: none;
 	width: 5rem;
 	transition: 0.25s width, 0.25s background-color;
-	height: 100%;
 }
 section#menu.open{
 	width: 20rem;
 	background-color: #333333;
+	height: 100%;
 }
 section#menu>nav{
 	transition: 0.25s opacity, 0.25s visibility;
@@ -175,6 +175,9 @@ section#popup{
 	align-items: center;
 	justify-content: center;
 }
+div#options-section{
+	height: 2rem;
+}
 section#popup.hidden{
 	opacity: 0;
 	visibility: hidden;
@@ -212,9 +215,14 @@ div.slider-container>label{
 	width: 20rem;
 	text-align: right;
 	padding-right: 2rem;
+	line-height: 2rem;
 }
 div.slider-container>input{
 	width: 20rem;
+}
+div.slider-container>output{
+	width: 3rem;
+	text-align: center;
 }
 
 
