@@ -196,18 +196,12 @@ section#popup>a#exit-popup{
 	z-index: 20;
 }
 section#popup>iframe#popup-content{
-	position: fixed;
 	background-color: Black;
 	width: calc(100vw - 10rem);
 	height: calc(100vh - 10rem);
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	color: White;
-	overflow-y: scroll;
 	outline: none;
 	border: none;
+	margin-top: auto;
 }
 @media only screen and (max-width: 600px) {
 	section#popup>h1{
