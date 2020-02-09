@@ -5,10 +5,12 @@
 		<meta name="author" content="Cam Olson">
 		<title>Tile Top Off</title>
 		<link rel="stylesheet" href="styles/main.css">
+		<link rel="stylesheet" href="styles/sliders.css">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<script src="scripts/game.js"></script> 
 		<script src="scripts/popup.js"></script>
 		<script src="scripts/menu.js"></script>
+		<link rel="icon" href="media/images/icon.png">
 	</head>
 	<body>
 		<section id="menu">
@@ -19,6 +21,7 @@
 			</div>
 
 			<nav>
+				<a onclick="closePopup(); showInstructionPopup(); closeMenu();">How to Play</a>
 				<a onclick="closePopup(); showOptionsPopup(); closeMenu();">Options</a>
 				<a onclick="closePopup(); hideStatus(); resetGame(); closeMenu();">Reset</a>
 			</nav>
@@ -36,9 +39,9 @@
 
 		<section id="popup" class="hidden">
 			<a id="exit-popup" onclick="closePopup()">⮌</a>
-			<div id="popup-content">
+			<iframe id="popup-content" src="">
 
-			</div>
+			</iframe>
 		</section>
 	</body>
 </html>

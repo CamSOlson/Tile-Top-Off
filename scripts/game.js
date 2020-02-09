@@ -43,28 +43,28 @@ window.addEventListener("load", function(){
 		update(e.keyCode);
 	}
 	
-	mainGame.addEventListener("click", function(e){
-		let rect = mainGame.getBoundingClientRect();
+	gameBoard.addEventListener("click", function(e){
+		let rect = gameBoard.getBoundingClientRect();
 		let scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
 		let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
 		
-		touchMove(mainGame, e.clientX - rect.left - scrollLeft, e.clientY - rect.top - scrollTop);
+		touchMove(gameBoard, e.clientX - rect.left - scrollLeft, e.clientY - rect.top - scrollTop);
 	});
 
-	swipeMovement(mainGame, function(swipeDir){
+	swipeMovement(gameBoard, function(swipeDir){
         if (swipeDir != "none"){
             switch (swipeDir){
 				case "up":
-					update(38);
+					update(38, true);
 					break;
 				case "down":
-					update(40);
+					update(40, true);
 					break;
 				case "left":
-					update(37);
+					update(37, true);
 					break;
 				case "right":
-					update(39);
+					update(39, true);
 					break;
 			}
         }
@@ -173,21 +173,29 @@ function getAdjacentTiles(x, y){
 	//Above
 	if (y > 0){
 		adjTiles.push(tiles[x][y - 1]);
+	}else{
+		adjTiles.push(undefined);
 	}
 	//Below
 	if (y < tilesTall - 1){
 		//adjTiles += tiles[x][y + 1];
 		adjTiles.push(tiles[x][y + 1]);
+	}else{
+		adjTiles.push(undefined);
 	}
 	//Left
 	if (x > 0){
 		//adjTiles += tiles[x - 1][y];
 		adjTiles.push(tiles[x - 1][y]);
+	}else{
+		adjTiles.push(undefined);
 	}
 	//Right
 	if (x < tilesWide - 1){
 		//adjTiles += tiles[x + 1][y];
 		adjTiles.push(tiles[x + 1][y]);
+	}else{
+		adjTiles.push(undefined);
 	}
 	return adjTiles;
 }
@@ -218,7 +226,10 @@ function touchMove(element, x, y){
 	}
 }
 
-function update(key){
+function update(key, shift){
+	if (!shift){
+		shift = window.event.shiftKey;
+	}
 	if (!blockInput){
 		if (gameOver && !transition){
 			if (key == "38" || key == "40" || key == "37" || key == "39" || key == "87" || key == "83" || key == "65" || key == "68") {
@@ -235,16 +246,16 @@ function update(key){
 		}else if (!transition && !starting){
 			//Check movements
 			if (key == "38" || key == "87") {
-				move(0);
+				move(0, shift);
 			}
 			else if (key == "40" || key == "83") {
-				move(1);
+				move(1, shift);
 			}
 			else if (key == "37" || key == "65") {
-			   move(2);
+			   move(2, shift);
 			}
 			else if (key == "39" || key == "68") {
-			   move(3);
+			   move(3, shift);
 			}
 			
 			//Check if the player is at a dead end
@@ -289,44 +300,15 @@ function showStart(){
 	initHighScore();
 }
 
-function move(direction){
-	let adjacentTiles = getAdjacentTiles(playerTile.style.gridColumnStart - 1, playerTile.style.gridRowStart - 1);
-	
-	switch (direction){
-		case 0:
-		//UP
-			for (let tile of adjacentTiles){
-				if (tile.style.gridRowStart - 1 === playerTile.style.gridRowStart - 2){
-					movePlayer(playerTile, tile);
-				}
-			}
-			break;
-		case 1:
-		//DOWN
-			for (let tile of adjacentTiles){
-				if (tile.style.gridRowStart - 2 === playerTile.style.gridRowStart - 1){
-					movePlayer(playerTile, tile);
-				}
-			}
-			break;
-		case 2:
-		//LEFT
-			for (let tile of adjacentTiles){
-				if (tile.style.gridColumnStart - 1 === playerTile.style.gridColumnStart - 2){
-					movePlayer(playerTile, tile);
-				}
-			}
-			break;
-		case 3:
-		//RIGHT
-			for (let tile of adjacentTiles){
-				if (tile.style.gridColumnStart - 2 === playerTile.style.gridColumnStart - 1){
-					movePlayer(playerTile, tile);
-				}
-			}
-			break;
-			
-	}
+function move(direction, allTheWay){
+	do {
+		let adjacentTiles = getAdjacentTiles(playerTile.style.gridColumnStart - 1, playerTile.style.gridRowStart - 1);
+		if (adjacentTiles[direction] !== undefined){
+			allTheWay = movePlayer(playerTile, adjacentTiles[direction]) && allTheWay;
+		}else{
+			allTheWay = false;
+		}
+	} while (allTheWay);
 }
 
 function movePlayer(playerTile, targetTile){
@@ -338,6 +320,9 @@ function movePlayer(playerTile, targetTile){
 		//Set other tile to a "used" tile
 		targetTile.dataset.tiletype = "used";
 		targetTile.style.backgroundColor = getUsedTileColor();
+		return true;
+	}else{
+		return false;
 	}
 }
 
@@ -373,7 +358,7 @@ function switchTiles(tile1, tile2){
 function atDeadEnd(){
 	for (let tile of getAdjacentTiles(playerTile.style.gridColumnStart - 1, playerTile.style.gridRowStart - 1)){
 		//If any adjacent tile is empty, return false since there is at least one more move
-		if (tile.dataset.tiletype === "empty"){
+		if (tile !== undefined && tile.dataset.tiletype === "empty"){
 			return false;
 		}
 	}

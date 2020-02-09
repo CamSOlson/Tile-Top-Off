@@ -1,0 +1,84 @@
+body{
+    background-color: Black;
+    font-family: sans-serif;
+    color: White;
+    padding: 1rem;
+    text-align: center;
+}
+
+main{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+h1{
+    font-size: 2rem;
+}
+h2{
+	font-size: 1.5rem;
+}
+p{
+	font-size: 1rem;
+}
+span.control{
+	color: #888888;
+	font-style: italic;
+}
+
+div.slider-container{
+	width: 90%;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	margin: 0.5rem;
+}
+div.slider-container>label{
+	width: 20rem;
+	text-align: right;
+	padding-right: 2rem;
+	line-height: 2rem;
+}
+div.slider-container>input{
+	width: 20rem;
+}
+div.slider-container>output{
+	width: 3rem;
+	text-align: center;
+}
+figure.instruction-diagram{
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+figure.instruction-diagram img{
+	height: 10rem;
+	margin: 1rem;
+}
+figure.instruction-diagram a{
+	font-size: 5rem;
+	margin: 1rem;
+}
+figure.instruction-diagram div.progression{
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+}
+@media only screen and (max-width: 600px) {
+	figure.instruction-diagram img{
+		height: 6rem;
+		margin: 0.5rem;
+	}
+	figure.instruction-diagram a{
+		font-size: 3rem;
+		margin: 0.5rem;
+	}
+	figure.instruction-diagram{
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+}

@@ -127,10 +127,11 @@ nav>a{
 	padding: 0.5rem 1rem 0.5rem 0rem;
 	text-align: right;
 	cursor: pointer;
+	white-space: nowrap
 }
 div#icon{
-	width: 4rem;
-	height: 4rem;
+	width: 3rem;
+	height: 3rem;
 	padding: 0.5rem;
 	display: flex;
 	flex-direction: column;
@@ -142,7 +143,7 @@ div#icon>a{
 	width: 100%;
 	height: 0.25rem;
 	background-color: White;
-	border-radius: 0.25rem;
+	/*border-radius: 0.25rem;*/
 }
 @media only screen and (max-width: 600px) {
 	div#icon{
@@ -152,7 +153,9 @@ div#icon>a{
 	div#icon>a{
 		height: 0.25rem;
 	}
-
+	section#menu.open{
+		width: 15rem;
+	}
 	nav>a{
 		font-size: 2rem;
 	}
@@ -165,7 +168,7 @@ section#popup{
 	opacity: 1;
 	visibility: visible;
 	z-index: 5;
-	background-color: rgba(0, 0, 0, 0.5);
+	background-color: #33333360;
 	width: 100vw;
 	height: 100vh;
 	position: fixed;
@@ -187,111 +190,37 @@ section#popup>a#exit-popup{
 	position: fixed;
 	left: 0;
 	top: 0;
+	line-height: 3rem;
 	padding: 0.5rem;
 	cursor: pointer;
+	z-index: 20rem;
 }
-section#popup>div#popup-content{
+section#popup>iframe#popup-content{
+	position: fixed;
 	background-color: Black;
-	width: calc(100% - 10rem);
-	height: calc(100% - 10rem);
+	width: calc(100vw - 10rem);
+	height: calc(100vh - 10rem);
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
 	color: White;
-}
-div#popup-content>h1{
-	font-size: 2rem;
-}
-div#popup-content>div.slider-container{
-	width: 90%;
-	display: flex;
-	flex-direction: row;
-	justify-content: center;
-	align-items: center;
-	margin: 0.5rem;
-}
-div.slider-container>label{
-	width: 20rem;
-	text-align: right;
-	padding-right: 2rem;
-	line-height: 2rem;
-}
-div.slider-container>input{
-	width: 20rem;
-}
-div.slider-container>output{
-	width: 3rem;
-	text-align: center;
-}
-
-
-
-/*Sliders*/
-input[type=range] {
-	-webkit-appearance: none;
-	width: 100%;
-}
-input[type=range]:focus {
+	overflow-y: scroll;
 	outline: none;
+	border: none;
 }
-input[type=range]::-webkit-slider-runnable-track {
-	width: 100%;
-	height: 2rem;
-	cursor: pointer;
-	background: #333333;
-}
-input[type=range]::-webkit-slider-thumb {
-	-webkit-appearance: none;
-	height: 2rem;
-	width: 2rem;
-	background: #888888;
-	cursor: pointer;
-}
-input[type=range]:focus::-webkit-slider-runnable-track {
-	background: #333333;
-}
-input[type=range]::-moz-range-track {
-	width: 100%;
-	height: 2rem;
-	cursor: pointer;
-	background: #333333;
-}
-input[type=range]::-moz-range-thumb {
-	-webkit-appearance: none;
-	height: 2rem;
-	width: 2rem;
-	background: #888888;
-	cursor: pointer;
-}
-input[type=range]::-ms-track {
-	width: 100%;
-	height: 2rem;
-	cursor: pointer;
-	background: #333333;
-}
-input[type=range]::-ms-fill-lower {
-	width: 100%;
-	height: 2rem;
-	cursor: pointer;
-	background: #333333;
-}
-input[type=range]::-ms-fill-upper {
-	width: 100%;
-	height: 2rem;
-	cursor: pointer;
-	background: #333333;
-}
-input[type=range]::-ms-thumb {
-	-webkit-appearance: none;
-	height: 2rem;
-	width: 2rem;
-	background: #888888;
-	cursor: pointer;
-}
-input[type=range]:focus::-ms-fill-lower {
-	background: #333333;
-}
-input[type=range]:focus::-ms-fill-upper {
-	background: #333333;
+@media only screen and (max-width: 600px) {
+	section#popup>h1{
+		padding-top: 4rem;
+	}
+	section#popup>iframe#popup-content{
+		width: 100vw;
+		height: calc(100vh - 4rem);
+		text-align: center;
+		bottom: 0;
+	}
+	section#popup>a#exit-popup{
+		font-size: 3rem;
+		line-height: 3rem;
+	}
 }
