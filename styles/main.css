@@ -193,7 +193,7 @@ section#popup>a#exit-popup{
 	line-height: 3rem;
 	padding: 0.5rem;
 	cursor: pointer;
-	z-index: 20rem;
+	z-index: 20;
 }
 section#popup>iframe#popup-content{
 	position: fixed;
