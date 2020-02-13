@@ -196,6 +196,17 @@ section#popup>a#exit-popup{
 	padding: 0.5rem;
 	cursor: pointer;
 	z-index: 20;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.exit-arrow {
+	width: 0;
+	height: 0;
+	border-top: 1.25rem solid transparent;
+	border-right: 2.5rem solid White;
+	border-bottom: 1.25rem solid transparent;
+	margin: 0.5rem;
 }
 section#popup>iframe#popup-content{
 	background-color: Black;
@@ -219,6 +230,14 @@ section#popup>iframe#popup-content{
 		align-items: center;
 		justify-content: center;
 		padding: 0.5vh;
+	}
+	.exit-arrow {
+		width: 0;
+		height: 0;
+		border-top: 2vh solid transparent;
+		border-right: 4vh solid White;
+		border-bottom: 2vh solid transparent;
+		margin: 0.5vh;
 	}
 }
 

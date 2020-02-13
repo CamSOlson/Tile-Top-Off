@@ -6,6 +6,7 @@
 		<title>Tile Top Off</title>
 		<link rel="stylesheet" href="styles/main.css">
 		<link rel="stylesheet" href="styles/sliders.css">
+		<link rel="stylesheet" href="styles/scrollbar.css">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<script src="scripts/game.js"></script> 
 		<script src="scripts/popup.js"></script>
@@ -15,9 +16,7 @@
 	<body>
 		<section id="menu">
 			<div id="icon" onclick="toggleMenu()">
-				<a></a>
-				<a></a>
-				<a></a>
+				<a></a><a></a><a></a>
 			</div>
 
 			<nav>
@@ -38,10 +37,8 @@
 		</main>
 
 		<section id="popup" class="hidden">
-			<a id="exit-popup" onclick="closePopup()">⮌</a>
-			<iframe id="popup-content" src="">
-
-			</iframe>
+			<a id="exit-popup" onclick="closePopup()"><div class="exit-arrow"></div></a>
+			<iframe id="popup-content" src=""></iframe>
 		</section>
 	</body>
 </html>
