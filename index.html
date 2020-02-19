@@ -11,6 +11,7 @@
 		<script src="/scripts/game.js"></script> 
 		<script src="/scripts/popup.js"></script>
 		<script src="/scripts/menu.js"></script>
+		<script src="/scripts/install.js"></script>
 		<link rel="icon" href="/media/images/icons/icon-64x64.png">
 		<link rel="manifest" href="/public/manifest.json">
 		<meta name="apple-mobile-web-app-capable" content="yes">
@@ -37,9 +38,10 @@
 			</div>
 
 			<nav>
-				<a onclick="closePopup(); showInstructionPopup(); closeMenu();">How to Play</a>
-				<a onclick="closePopup(); showOptionsPopup(); closeMenu();">Options</a>
-				<a onclick="closePopup(); hideStatus(); resetGame(); closeMenu();">Reset</a>
+				<a id="instruction-button" onclick="closePopup(); showInstructionPopup(); closeMenu();">How to Play</a>
+				<a id="option-button" onclick="closePopup(); showOptionsPopup(); closeMenu();">Options</a>
+				<a id="reset-button" onclick="closePopup(); hideStatus(); resetGame(); closeMenu();">Reset</a>
+				<a id="install-button" onclick="install();" hidden>Install</a>
 			</nav>
 		</section>
 

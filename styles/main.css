@@ -100,7 +100,7 @@ section#menu{
 	top: 0;
 	z-index: 10;
 	background-color: none;
-	width: 5rem;
+	width: 0;
 	transition: 0.25s width, 0.25s background-color;
 }
 section#menu.open{
@@ -112,10 +112,11 @@ section#menu>nav{
 	transition: 0.25s opacity, 0.25s visibility;
 	opacity: 0;
 	visibility: hidden;
+	margin-top: 5rem;
+	height: calc(100vh - 5rem);
+
 	display: flex;
 	flex-direction: column;
-	align-items: flex-end;
-	margin-top: 5rem;
 }
 section#menu.open>nav{
 	opacity: 1;
@@ -123,11 +124,17 @@ section#menu.open>nav{
 }
 nav>a{
 	font-size: 2rem;
+	line-height: 2rem;
 	width: calc(100% - 1rem);
 	padding: 0.5rem 1rem 0.5rem 0rem;
 	text-align: right;
 	cursor: pointer;
-	white-space: nowrap
+	white-space: nowrap;
+}
+a#install-button{
+	margin-top: auto;
+	line-height: 4rem;
+	background-color: #888888;
 }
 div#icon{
 	width: 3rem;
@@ -135,7 +142,7 @@ div#icon{
 	padding: 0.5rem;
 	display: flex;
 	flex-direction: column;
-	justify-content: space-evenly;
+	justify-content: space-around;
 	cursor: pointer;
 	float: right;
 }
@@ -150,6 +157,12 @@ div#icon>a{
 		width: 6vh;
 		height: 6vh;
 		padding: 0.5vh;
+	}
+	section#menu{
+		width: 0rem;
+	}
+	section#menu>nav{
+		height: calc(100vh - 7vh);
 	}
 	div#icon>a{
 		height: 0.2rem;
