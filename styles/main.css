@@ -176,6 +176,27 @@ div#icon>a{
 	}
 }
 
+div#hold-indicator{
+	transition: 0.25s width, 0.25s height, 0.25s top, 0.25s left, 0.25s opacity;
+	position: fixed;
+	width: 0;
+	height: 0;
+	opacity: 0;
+	top: 0;
+	left: 0;
+	background-color: #ffffff;
+	border-radius: 50%;
+	touch-action: none;
+	pointer-events: none;
+	z-index: 100;
+}
+div#hold-indicator.active{
+	width: 7rem;
+	height: 7rem;
+	opacity: 0.75;
+	top: -3.5rem;
+	left: -3.5rem;
+}
 
 /*Popup*/
 section#popup{

@@ -31,6 +31,7 @@ var blockInput = false;
 
 var mainGame;
 var gameBoard;
+var holdIndicator;
 
 var localStorage;
 
@@ -43,6 +44,7 @@ window.addEventListener("load", function(){
 	statusMain = document.querySelector("p#statusMain");
 	statusSub = document.querySelector("p#statusSub");
 	tileDiv = document.querySelector("div#tiles");
+	holdIndicator = document.querySelector("div#hold-indicator");
 
 	initLocalStorage();
 	initHighScore();
@@ -64,20 +66,20 @@ window.addEventListener("load", function(){
 		touchMove(gameBoard, e.clientX - rect.left - scrollLeft, e.clientY - rect.top - scrollTop);
 	});
 
-	swipeMovement(gameBoard, function(swipeDir){
+	swipeMovement(mainGame, function(swipeDir, held){
         if (swipeDir != "none"){
             switch (swipeDir){
 				case "up":
-					update(38, true);
+					update(38, held);
 					break;
 				case "down":
-					update(40, true);
+					update(40, held);
 					break;
 				case "left":
-					update(37, true);
+					update(37, held);
 					break;
 				case "right":
-					update(39, true);
+					update(39, held);
 					break;
 			}
         }
@@ -461,36 +463,73 @@ function swipeMovement(element, callback){
 	let swipeDir, startX, startY, distX, distY, 
 	threshold = 50, //min dist
     restraint = 50, //max deviation
-    allowedTime = 300, //max time
-    elapsedTime, startTime,
-    swipeEvent = callback || function(swipeDir){};
+	allowedTime = 300, //max time
+	holdTime = 500, //Time to hold for full move
+	holdThreshold = 10, //Num of pixels user can move while counting as holding
+	holdSwipeEvent, holdSwipe = false, elapsedTime, startTime,
+    swipeEvent = callback || function(swipeDir, held){};
   
     touchElem.addEventListener("touchstart", function(e){
         let touchobj = e.changedTouches[0];
         swipeDir = "none";
         dist = 0;
         startX = touchobj.pageX;
-        startY = touchobj.pageY;
-        startTime = new Date().getTime();
+		startY = touchobj.pageY;
+		distX = 0;
+		distY = 0;
+		startTime = new Date().getTime();
+		holdSwipeEvent = setTimeout(function(){
+			holdSwipe = true;
+			holdIndicator.classList.add("active");
+		}, holdTime);
+		updateHoldIndicator();
     }, {passive: true});
   
-    touchElem.addEventListener("touchmove", function(e){e.preventDefault();});
+    touchElem.addEventListener("touchmove", function(e){
+		e.preventDefault();
+
+		var touchobj = e.changedTouches[0]
+        distX = touchobj.pageX - startX;
+        distY = touchobj.pageY - startY;
+		elapsedTime = new Date().getTime() - startTime;
+
+		updateHoldIndicator();
+
+		if (!holdSwipe && Math.sqrt(Math.pow(distX, 2) + Math.pow(distY, 2)) > holdThreshold){
+			//Moved too much, cancel hold swipe
+			clearTimeout(holdSwipeEvent);
+			holdIndicator.classList.remove("active");
+		}
+
+		if (holdSwipe){
+			//If event is a hold swipe, constantly reset start so normal swipe code can still work
+			startTime = new Date().getTime();
+		}
+	});
   
     touchElem.addEventListener("touchend", function(e){
+		clearTimeout(holdSwipeEvent);
+		holdIndicator.classList.remove("active");
         var touchobj = e.changedTouches[0]
         distX = touchobj.pageX - startX;
         distY = touchobj.pageY - startY;
-        elapsedTime = new Date().getTime() - startTime;
-        if (elapsedTime <= allowedTime){
-            if (Math.abs(distX) >= threshold && Math.abs(distY) <= restraint){
-                swipeDir = (distX < 0)? "left" : "right";
-            }
-            else if (Math.abs(distY) >= threshold && Math.abs(distX) <= restraint){
-                swipeDir = (distY < 0)? "up" : "down";
-            }
-        }
-        swipeEvent(swipeDir);
-    }, {passive: true})
+		elapsedTime = new Date().getTime() - startTime;
+		updateHoldIndicator();
+		if (elapsedTime <= allowedTime){
+			if (Math.abs(distX) >= threshold && Math.abs(distY) <= restraint){
+				swipeDir = (distX < 0)? "left" : "right";
+			}
+			else if (Math.abs(distY) >= threshold && Math.abs(distX) <= restraint){
+				swipeDir = (distY < 0)? "up" : "down";
+			}
+		}	
+		swipeEvent(swipeDir, holdSwipe);
+		holdSwipe = false;
+	}, {passive: true});
+
+	function updateHoldIndicator(){
+		holdIndicator.style.transform = "translate(" + (startX + distX) + "px, " + (startY + distY) + "px)";
+	}
 }
 
 //Tile generator

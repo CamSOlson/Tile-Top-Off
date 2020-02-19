@@ -16,14 +16,8 @@ window.addEventListener("load", function(){
 
 function install(){
 	deferredInstallPrompt.prompt();
-	// Hide the install button, it can't be called twice.
 	event.srcElement.setAttribute("hidden", true);
 	deferredInstallPrompt.userChoice.then((choice) => {
-		if (choice.outcome === "accepted") {
-			console.log("accepted A2HS prompt", choice);
-		} else {
-			console.log("dismissed A2HS prompt", choice);
-		}
 		deferredInstallPrompt = null;
 	});
 }
