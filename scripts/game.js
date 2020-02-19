@@ -1,4 +1,5 @@
 var tileSize = "100%";
+var tileUnit = "vh";
 
 var tilesWide = 5;
 var tilesTall = 5;
@@ -204,6 +205,8 @@ function setPathComplexity(amount){
 }
 
 function getAdjacentTiles(x, y){
+	x = parseInt(x, 10);
+	y = parseInt(y, 10);
 	let adjTiles = [];
 	//Above
 	if (y > 0){
@@ -213,21 +216,18 @@ function getAdjacentTiles(x, y){
 	}
 	//Below
 	if (y < tilesTall - 1){
-		//adjTiles += tiles[x][y + 1];
 		adjTiles.push(tiles[x][y + 1]);
 	}else{
 		adjTiles.push(undefined);
 	}
 	//Left
 	if (x > 0){
-		//adjTiles += tiles[x - 1][y];
 		adjTiles.push(tiles[x - 1][y]);
 	}else{
 		adjTiles.push(undefined);
 	}
 	//Right
 	if (x < tilesWide - 1){
-		//adjTiles += tiles[x + 1][y];
 		adjTiles.push(tiles[x + 1][y]);
 	}else{
 		adjTiles.push(undefined);
@@ -359,7 +359,7 @@ function showStart(){
 
 function move(direction, allTheWay){
 	do {
-		let adjacentTiles = getAdjacentTiles(playerTile.style.gridColumnStart - 1, playerTile.style.gridRowStart - 1);
+		let adjacentTiles = getAdjacentTiles(playerTile.dataset.x, playerTile.dataset.y);
 		if (adjacentTiles[direction] !== undefined){
 			allTheWay = movePlayer(playerTile, adjacentTiles[direction]) && allTheWay;
 		}else{
@@ -401,19 +401,27 @@ function hexToRGB(hex) {
 }
 
 function switchTiles(tile1, tile2){
-	let t1x = tile1.style.gridColumnStart;
-	let t1y = tile1.style.gridRowStart;
-	tile1.style.gridColumnStart = tile2.style.gridColumnStart;
-	tile1.style.gridRowStart = tile2.style.gridRowStart;
-	tile2.style.gridColumnStart = t1x;
-	tile2.style.gridRowStart = t1y;
+	let t1x = tile1.dataset.x;
+	let t1y = tile1.dataset.y;
+	let t1top = tile1.style.top;
+	let t1left = tile1.style.left;
+
+	tile1.dataset.x = tile2.dataset.x;
+	tile1.dataset.y = tile2.dataset.y;
+	tile1.style.top = tile2.style.top;
+	tile1.style.left = tile2.style.left;
+
+	tile2.dataset.x = t1x;
+	tile2.dataset.y = t1y;
+	tile2.style.top = t1top;
+	tile2.style.left = t1left;
 	
-	tiles[tile1.style.gridColumnStart - 1][tile1.style.gridRowStart - 1] = tile1;
-	tiles[tile2.style.gridColumnStart - 1][tile2.style.gridRowStart - 1] = tile2;
+	tiles[tile1.dataset.x][tile1.dataset.y] = tile1;
+	tiles[tile2.dataset.x][tile2.dataset.y] = tile2;
 }
 
 function atDeadEnd(){
-	for (let tile of getAdjacentTiles(playerTile.style.gridColumnStart - 1, playerTile.style.gridRowStart - 1)){
+	for (let tile of getAdjacentTiles(playerTile.dataset.x, playerTile.dataset.y)){
 		//If any adjacent tile is empty, return false since there is at least one more move
 		if (tile !== undefined && tile.dataset.tiletype === "empty"){
 			return false;
@@ -537,7 +545,7 @@ function swipeMovement(element, callback){
 function generateTiles() {
 	tilesTall = tilesWide;
 	tilesFilled = 0;
-	tileSize = (100 / tilesWide) + "%";
+	tileSize = (100 / tilesWide);
 	
 	let prevColor = playerTileColor;
 	while (playerTileColor == prevColor){
@@ -556,17 +564,23 @@ function generateTiles() {
 	//Populate game board with tiles. Iterate through tile width and height
 	for (let x = 0; x < tilesWide; x++){
 		boardColumns += " " + tileSize;
-		let column = []
+		let col = [];
 		for (let y = 0; y < tilesTall; y++){
 			let tile = document.createElement("a");
 			tile.classList.add("tile");
-			tile.style.gridColumnStart = x + 1;
-			tile.style.gridRowStart = y + 1;
-			tileDiv.appendChild(tile);			
-			column[y] = tile;
+			tile.dataset.x = x;
+			tile.dataset.y = y;
+			tileDiv.appendChild(tile);	
+			tile.style.left = (tileSize * x) + "%";
+			tile.style.top = (tileSize * y) + "%";
+			tile.style.width = tileSize + "%";
+			tile.style.height = tileSize + "%";
+
+			col.push(tile);
 		}
-		tiles[x] = column;
+		tiles[x] = col;
 	}
+	//tiles.pop();
 	
 	//Make the styling rule for the columns since it was too messy to do before
 	for (let y = 0; y < tilesTall; y++){
@@ -581,8 +595,8 @@ function generateTiles() {
 	}
 	
 	//Generate a random location for the player tile
-	let x = getRandomInt(tilesWide);
-	let y = getRandomInt(tilesTall);
+	let x = getRandomInt(tilesWide - 1);
+	let y = getRandomInt(tilesTall - 1);
 	tiles[x][y].dataset.tiletype = "player";
 	tiles[x][y].style.backgroundColor = playerTileColor;
 	playerTile = tiles[x][y];
@@ -671,8 +685,8 @@ function generateTiles() {
 	}
 	obstacles = tilesWide * tilesTall - 1;
 	//Adequate path generated, set the real tile map
-	for (let xCoord = 0; xCoord < tilesWide; xCoord++){
-		for (let yCoord = 0; yCoord < tilesTall; yCoord++){
+	for (let xCoord = 0; xCoord < tiles.length; xCoord++){
+		for (let yCoord = 0; yCoord < tiles[x].length; yCoord++){
 			if (visitedMap[xCoord][yCoord] && tiles[xCoord][yCoord].dataset.tiletype === "obstacle"){
 				tiles[xCoord][yCoord].dataset.tiletype = "empty";
 				tiles[xCoord][yCoord].style.backgroundColor = defaultTileColor;
