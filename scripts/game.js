@@ -26,18 +26,31 @@ var score = 0;
 var gameOver = false;
 var transition = false;
 var starting = true;
+var useLocalStorage = false;
+var blockInput = false;
 
 var mainGame;
 var gameBoard;
 
 var localStorage;
-var useLocalStorage = false;
 
-var blockInput = false;
+var difficulty;
 
 window.addEventListener("load", function(){
-	loadGame();
-	
+	mainGame = document.querySelector("main#game");
+	gameBoard = document.querySelector("section#board");
+	statusDiv = document.querySelector("div#status");
+	statusMain = document.querySelector("p#statusMain");
+	statusSub = document.querySelector("p#statusSub");
+	tileDiv = document.querySelector("div#tiles");
+
+	initLocalStorage();
+	initHighScore();
+	initBoardSize();
+	initPathComplexity();	
+
+	showStart();
+
 	window.onkeydown = function(e){
 		e = e || window.event;
 		update(e.keyCode);
@@ -71,21 +84,7 @@ window.addEventListener("load", function(){
     });
 });
 
-function loadGame(){
-	statusDiv = document.querySelector("div#status");
-	statusMain = document.querySelector("a#statusMain");
-	statusSub = document.querySelector("a#statusSub");
-	tileDiv = document.querySelector("div#tiles");
-		
-	initLocalStorage();
-	initHighScore();
-	initBoardSize();
-	initPathComplexity();
-
-	mainGame = document.querySelector("main#game");
-	gameBoard = document.querySelector("section#board");
-	
-	showStart();
+function loadGame(){		
 	generateTiles();
 }
 
@@ -124,13 +123,47 @@ function initLocalStorage(){
 function initHighScore(){
 	if (useLocalStorage){
 		//Setup high score
-		if (localStorage.highscore === undefined){
-			localStorage.highscore = 0;
+		if (localStorage.highscoreEasy === undefined){
+			localStorage.highscoreEasy = 0;
 		}
-		statusSub.innerHTML = statusSub.innerHTML.replace("@hs", localStorage.highscore);
+		statusSub.innerHTML = statusSub.innerHTML.replace("%hse", localStorage.highscoreEasy);
+		if (localStorage.highscoreNormal === undefined){
+			localStorage.highscoreNormal = 0;
+		}
+		statusSub.innerHTML = statusSub.innerHTML.replace("%hsn", localStorage.highscoreNormal);
+		if (localStorage.highscoreHard === undefined){
+			localStorage.highscoreHard = 0;
+		}
+		statusSub.innerHTML = statusSub.innerHTML.replace("%hsh", localStorage.highscoreHard);
+
 	}else{
 		//No high score storage
-		statusSub.innerHTML = statusSub.innerHTML.replace("@hs", "Offline -- No high score available");
+		statusSub.innerHTML = statusSub.innerHTML.replace("%hse", "No high score available");
+		statusSub.innerHTML = statusSub.innerHTML.replace("%hsn", "No high score available");
+		statusSub.innerHTML = statusSub.innerHTML.replace("%hsh", "No high score available");
+
+	}
+}
+
+function setDifficulty(dif){
+	difficulty = dif;
+	switch (difficulty){
+		case 0:
+			//Easy
+			setPathComplexity(0.6);
+			setBoardSize(4);
+
+			break;
+		case 1:
+			setPathComplexity(0.6);
+			setBoardSize(5);
+
+			break;
+		case 2:
+			setPathComplexity(0.7);
+			setBoardSize(6);
+
+			break;
 	}
 }
 
@@ -233,7 +266,7 @@ function update(key, shift){
 	if (!blockInput){
 		if (gameOver && !transition){
 			if (key == "38" || key == "40" || key == "37" || key == "39" || key == "87" || key == "83" || key == "65" || key == "68") {
-
+				starting = true;
 				showStart();
 				gameOver = false;
 				loadGame();
@@ -241,6 +274,7 @@ function update(key, shift){
 		}else if (starting){
 			if (key == "38" || key == "40" || key == "37" || key == "39" || key == "87" || key == "83" || key == "65" || key == "68") {
 				starting = false;
+				loadGame();
 				hideStatus();
 			}
 		}else if (!transition && !starting){
@@ -265,9 +299,7 @@ function update(key, shift){
 					score++;
 					showStatus("STAGE COMPLETE", "#00FF00", "Score: " + score + "<br><br>Generating next level...", "#C8FFC8", "Black");
 					//Update high score in storage
-					if (useLocalStorage && score > Number(localStorage.highscore)){
-						localStorage.highscore = score;
-					}
+					updateHighScore(score, difficulty);
 					//Set delayed reset
 					setTimeout(function() {generateTiles();}, 500);
 					setTimeout(hideStatus, 1500);
@@ -279,6 +311,29 @@ function update(key, shift){
 				}
 			}
 		}
+	}
+}
+
+function updateHighScore(currentScore, currentDifficulty){
+	switch (currentDifficulty){
+		case 0:
+			//Easy
+			if (useLocalStorage && score > Number(localStorage.highscoreEasy)){
+				localStorage.highscoreEasy = currentScore;
+			}		
+			break;
+		case 1:
+			if (useLocalStorage && score > Number(localStorage.highscoreNormal)){
+				localStorage.highscoreNormal = currentScore;
+			}	
+			//Normal
+			break;
+		case 2:
+			//Hard
+			if (useLocalStorage && score > Number(localStorage.highscoreHard)){
+				localStorage.highscoreHard = currentScore;
+			}	
+			break;
 	}
 }
 
@@ -295,8 +350,8 @@ function disableGameInput(){
 }
 
 function showStart(){
-	starting = true;
-	showStatus("Tile Top Off", "White", "<a href='https://camsolson.com' target='-blank'>Cam Olson</a><br>v. 1.0<br><br><br>You are the <span style='color:#fb0000' id='player-instructions'><span style='font-size:2rem;font-style:normal;'>■</span> Colored Tile</span><br><br>Fill in the <span style='color:#333333'><span style='font-size:2rem;font-style:normal;'>■</span> Empty Tiles</span><br><br>Go around the randomly generated <span style='color:#888888'><span style='font-size:2rem;font-style:normal;'>■</span> Walls</span><br><br><br>Use <span style='color:#C0C0C0'>[W] [A] [S]</span> and <span style='color:#C0C0C0'>[D]</span>, the <span style='color:#C0C0C0'>Arrow Keys</span>, or <span style='color:#C0C0C0'>Swipe</span> in the direction you want to move<br><br>No <span style='color:#C0C0C0'>backtracking</span><br><br>The board gets bigger the longer you play<br><br><br><span style='font-size:1.5rem;'>High score: @hs</span><br><br><br><span style='color:#C0C0C0'>Move to start...</span>", "White", "rgba(0, 0, 0, 1)");
+	//showStatus("Tile Top Off", "White", "<a href='https://camsolson.com' target='-blank'>Cam Olson</a><br>v. 1.0<br><br><br>You are the <span style='color:#fb0000' id='player-instructions'><span style='font-size:2rem;font-style:normal;'>■</span> Colored Tile</span><br><br>Fill in the <span style='color:#333333'><span style='font-size:2rem;font-style:normal;'>■</span> Empty Tiles</span><br><br>Go around the randomly generated <span style='color:#888888'><span style='font-size:2rem;font-style:normal;'>■</span> Walls</span><br><br><br>Use <span style='color:#C0C0C0'>[W] [A] [S]</span> and <span style='color:#C0C0C0'>[D]</span>, the <span style='color:#C0C0C0'>Arrow Keys</span>, or <span style='color:#C0C0C0'>Swipe</span> in the direction you want to move<br><br>No <span style='color:#C0C0C0'>backtracking</span><br><br>The board gets bigger the longer you play<br><br><br><span style='font-size:1.5rem;'>High score: @hs</span><br><br><br><span style='color:#C0C0C0'>Move to start...</span>", "White", "rgba(0, 0, 0, 1)");
+	showStatus("Tile Top Off", "White", "<br>Your high scores:<br><br>Easy: %hse<br><br>Normal: %hsn<br><br>Hard: %hsh", "White", "Black");
 	initHighScore();
 }
 
@@ -417,7 +472,7 @@ function swipeMovement(element, callback){
         startX = touchobj.pageX;
         startY = touchobj.pageY;
         startTime = new Date().getTime();
-    });
+    }, {passive: true});
   
     touchElem.addEventListener("touchmove", function(e){e.preventDefault();});
   
@@ -435,7 +490,7 @@ function swipeMovement(element, callback){
             }
         }
         swipeEvent(swipeDir);
-    }, false)
+    }, {passive: true})
 }
 
 //Tile generator

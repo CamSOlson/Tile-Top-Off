@@ -2,7 +2,7 @@ body{
 	background-color: Black;
 	padding: 0;
 	margin: 0;
-	font-family: Arial_Local;
+	font-family: sans-serif;
 }
 main#game{
 	margin: 0;
@@ -51,26 +51,24 @@ div#status{
 	justify-content: center;
 	flex-wrap: wrap;
 }
-a#statusMain{	
+p#statusMain{	
 	transition: margin-top 0.25s;
 	text-align: center;
-	font-style: italic;
 	color: White;
 	font-weight: bold;
 	font-size: 2rem;
 }
-a#statusSub{
+p#statusSub{
 	transition: padding-top 0.25s;
 	text-align: center;
-	font-style: italic;
 	color: White;
 	font-weight: normal;
 	font-size: 1rem;
 }
-a#statusMain.status-hidden, a#statusSub.status-hidden{
+p#statusMain.status-hidden, p#statusSub.status-hidden{
 	padding-top: 100%;
 }
-a#statusMain.status-shown, a#statusSub.status-shown{
+p#statusMain.status-shown, p#statusSub.status-shown{
 	padding-top: 0;
 }
 a{
@@ -83,10 +81,10 @@ a{
 	opacity: 1;
 }
 @media only screen and (max-width: 600px) {
-	a#statusMain{
+	p#statusMain{
 		font-size: 1rem;
 	}
-	a#statusSub{
+	p#statusSub{
 		font-size: 0.75rem;
 		line-height: 0.75rem;
 	}
@@ -239,9 +237,4 @@ section#popup>iframe#popup-content{
 		border-bottom: 2vh solid transparent;
 		margin: 0.5vh;
 	}
-}
-
-@font-face {
-	font-family: Arial_Local;
-	src: url(../media/fonts/arial.ttf);
 }
