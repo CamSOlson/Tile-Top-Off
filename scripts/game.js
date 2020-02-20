@@ -1,5 +1,4 @@
 var tileSize = "100%";
-var tileUnit = "vh";
 
 var tilesWide = 5;
 var tilesTall = 5;
@@ -299,13 +298,16 @@ function update(key, shift){
 				if (checkWinState()){
 					transition = true;
 					score++;
-					showStatus("STAGE COMPLETE", "#00FF00", "Score: " + score + "<br><br>Generating next level...", "#C8FFC8", "Black");
+					//showStatus("STAGE COMPLETE", "#00FF00", "Score: " + score + "<br><br>Generating next level...", "#C8FFC8", "Black");
 					//Update high score in storage
 					updateHighScore(score, difficulty);
+					fadeToNewStage();
+					generateTiles();
+					transition = false
 					//Set delayed reset
-					setTimeout(function() {generateTiles();}, 500);
-					setTimeout(hideStatus, 1500);
-					setTimeout(function() {transition = false}, 1500);
+					//setTimeout(function() {generateTiles();}, 500);
+					// setTimeout(hideStatus, 1500);
+					// setTimeout(function() {transition = false}, 1500);
 				}else{
 					gameOver = true;
 					showStatus("GAME OVER", "#FF0000", "Stages complete: " + score + "<br><br>Move to continue...", "#FFC8C8", "rgba(0.5, 0.5, 0.5, 0.5)");
@@ -314,6 +316,15 @@ function update(key, shift){
 			}
 		}
 	}
+}
+
+function fadeToNewStage(){
+	let cloneBoard = tileDiv.cloneNode(true);
+	cloneBoard.setAttribute("id", "fade-board");
+	tileDiv.focus();
+	gameBoard.appendChild(cloneBoard);
+	setTimeout(function(){cloneBoard.classList.add("fade-out");}, 5);
+	setTimeout(function(){cloneBoard.parentNode.removeChild(cloneBoard);}, 505);
 }
 
 function updateHighScore(currentScore, currentDifficulty){
