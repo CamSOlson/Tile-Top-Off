@@ -304,7 +304,10 @@ function update(key, shift){
 					updateHighScore(score, difficulty);
 					fadeToNewStage();
 					generateTiles();
-					transition = false
+					transition = false;
+					if ("vibrate" in window.navigator && vibrate){
+						window.navigator.vibrate(100);
+					}
 					//Set delayed reset
 					//setTimeout(function() {generateTiles();}, 500);
 					// setTimeout(hideStatus, 1500);
@@ -313,6 +316,9 @@ function update(key, shift){
 					gameOver = true;
 					showStatus("GAME OVER", "#FF0000", "Stages complete: " + score + "<br><br>Move to continue...", "#FFC8C8", "rgba(0.5, 0.5, 0.5, 0.5)");
 					score = 0;
+					if ("vibrate" in window.navigator && vibrate){
+						window.navigator.vibrate(300);
+					}
 				}
 			}
 		}
@@ -378,10 +384,6 @@ function move(direction, allTheWay){
 			allTheWay = false;
 		}
 	} while (allTheWay);
-
-	if ("vibrate" in window.navigator && vibrate){
-		window.navigator.vibrate(10);
-	}
 }
 
 function movePlayer(playerTile, targetTile){
