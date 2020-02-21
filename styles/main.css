@@ -52,6 +52,7 @@ div.tiles{
 	position: absolute;
 	background-color: #333333;
 	top: 0;
+	overflow: hidden;
 }
 div.tiles.fade-out{
 	opacity: 0;
@@ -210,6 +211,7 @@ div#hold-indicator{
 	touch-action: none;
 	pointer-events: none;
 	z-index: 50;
+	overflow: hidden;
 }
 div#hold-indicator.active{
 	width: 7rem;
