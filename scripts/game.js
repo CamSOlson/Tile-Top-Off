@@ -488,7 +488,7 @@ function swipeMovement(element, callback){
 	threshold = 50, //min dist
     restraint = 50, //max deviation
 	allowedTime = 300, //max time
-	holdTime = 500, //Time to hold for full move
+	holdTime = 250, //Time to hold for full move
 	holdThreshold = 10, //Num of pixels user can move while counting as holding
 	holdSwipeEvent, holdSwipe = false, elapsedTime, startTime,
     swipeEvent = callback || function(swipeDir, held){};
