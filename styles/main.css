@@ -126,7 +126,7 @@ section#menu{
 section#menu.open{
 	width: 20rem;
 	background-color: #333333;
-	height: 100%;
+	height: 100vh;
 }
 section#menu>nav{
 	transition: 0.25s opacity, 0.25s visibility;
@@ -174,19 +174,19 @@ div#icon>a{
 }
 @media only screen and (max-width: 600px) {
 	div#icon{
-		width: 6vh;
-		height: 6vh;
-		padding: 0.5vh;
+		width: 2rem;
+		height: 2rem;
+		padding: 0.5rem;
 	}
 	section#menu{
 		width: 0rem;
 	}
 	section#menu>nav{
-		height: calc(100vh - 7vh);
+		height: calc(100vh - 5rem);
 	}
 	div#icon>a{
 		height: 0.2rem;
-		width: 6vh;
+		width: 2rem;
 	}
 	section#menu.open{
 		width: 15rem;
@@ -278,19 +278,19 @@ section#popup>iframe#popup-content{
 	}
 	section#popup>a#exit-popup{
 		font-size: 5vh;
-		height: 6vh;
-		width: 6vh;
+		height: 2rem;
+		width: 2rem;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		padding: 0.5vh;
+		padding: 0.5rem;
 	}
 	.exit-arrow {
 		width: 0;
 		height: 0;
-		border-top: 2vh solid transparent;
-		border-right: 4vh solid White;
-		border-bottom: 2vh solid transparent;
-		margin: 0.5vh;
+		border-top: 1rem solid transparent;
+		border-right: 2rem solid White;
+		border-bottom: 1rem solid transparent;
+		margin: 0.5rem;
 	}
 }

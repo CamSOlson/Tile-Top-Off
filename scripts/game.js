@@ -28,6 +28,7 @@ var transition = false;
 var starting = true;
 var useLocalStorage = false;
 var blockInput = false;
+var vibration = true;
 
 var mainGame;
 var gameBoard;
@@ -377,6 +378,9 @@ function move(direction, allTheWay){
 			allTheWay = false;
 		}
 	} while (allTheWay);
+	if ("vibrate" in navigator && vibrate){
+		navigator.vibrate(10);
+	}
 }
 
 function movePlayer(playerTile, targetTile){
@@ -514,15 +518,14 @@ function swipeMovement(element, callback){
 
 		updateHoldIndicator();
 
-		if (!holdSwipe && Math.sqrt(Math.pow(distX, 2) + Math.pow(distY, 2)) > holdThreshold){
-			//Moved too much, cancel hold swipe
-			clearTimeout(holdSwipeEvent);
-			holdIndicator.classList.remove("active");
-		}
-
-		if (holdSwipe){
-			//If event is a hold swipe, constantly reset start so normal swipe code can still work
-			startTime = new Date().getTime();
+		if (Math.sqrt(Math.pow(distX, 2) + Math.pow(distY, 2)) > holdThreshold){
+			if (!holdSwipe){
+				//Moved too much, cancel hold swipe
+				clearTimeout(holdSwipeEvent);
+				holdIndicator.classList.remove("active");
+			}else{
+				startTime = new Date().getTime();
+			}
 		}
 	});
   
