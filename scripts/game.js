@@ -380,7 +380,7 @@ function move(direction, allTheWay){
 	} while (allTheWay);
 
 	if ("vibrate" in window.navigator && vibrate){
-		window.navigator.vibrate(100);
+		window.navigator.vibrate(10);
 	}
 }
 
