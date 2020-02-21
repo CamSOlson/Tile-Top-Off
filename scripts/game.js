@@ -306,7 +306,7 @@ function update(key, shift){
 					generateTiles();
 					transition = false;
 					if ("vibrate" in window.navigator && vibrate){
-						window.navigator.vibrate(100);
+						window.navigator.vibrate(250);
 					}
 					//Set delayed reset
 					//setTimeout(function() {generateTiles();}, 500);
@@ -317,7 +317,7 @@ function update(key, shift){
 					showStatus("GAME OVER", "#FF0000", "Stages complete: " + score + "<br><br>Move to continue...", "#FFC8C8", "rgba(0.5, 0.5, 0.5, 0.5)");
 					score = 0;
 					if ("vibrate" in window.navigator && vibrate){
-						window.navigator.vibrate(300);
+						window.navigator.vibrate(500);
 					}
 				}
 			}

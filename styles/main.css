@@ -10,6 +10,7 @@ main#game{
 	width: 100vw;
 	max-width: 100%;
 	height: 100vh;
+	height: -webkit-fill-available;
 	max-height: 100%;
 	display: flex;
 	flex-direction: column;
@@ -126,7 +127,7 @@ section#menu{
 section#menu.open{
 	width: 20rem;
 	background-color: #333333;
-	height: 100vh;
+	height: 100%;
 }
 section#menu>nav{
 	transition: 0.25s opacity, 0.25s visibility;
