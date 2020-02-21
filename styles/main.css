@@ -135,6 +135,7 @@ section#menu>nav{
 	visibility: hidden;
 	margin-top: 5rem;
 	height: calc(100vh - 5rem);
+	height: calc(-webkit-fill-available - 5rem);
 
 	display: flex;
 	flex-direction: column;
@@ -182,9 +183,6 @@ div#icon>a{
 	section#menu{
 		width: 0rem;
 	}
-	section#menu>nav{
-		height: calc(100vh - 5rem);
-	}
 	div#icon>a{
 		height: 0.2rem;
 		width: 2rem;
@@ -228,6 +226,7 @@ section#popup{
 	background-color: #33333360;
 	width: 100vw;
 	height: 100vh;
+	height: -webkit-fill-available;
 	position: fixed;
 	top: 0;
 	bottom: 0;
@@ -267,6 +266,7 @@ section#popup>iframe#popup-content{
 	background-color: Black;
 	width: calc(100vw - 10rem);
 	height: calc(100vh - 10rem);
+	height: calc(-webkit-fill-available - 10rem);
 	outline: none;
 	border: none;
 }
