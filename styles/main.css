@@ -4,6 +4,7 @@ body{
 	margin: 0;
 	font-family: sans-serif;
 	overflow: hidden;
+	position: fixed;
 }
 main#game{
 	margin: 0;
@@ -17,6 +18,7 @@ main#game{
 	justify-content: center;
 	overflow: hidden;
 	z-index: 0;
+	position: fixed;
 }
 #game>h1{
 	color: White;
@@ -34,8 +36,7 @@ a.tile[data-tiletype = "player"]{
 section#board{
 	width: 90vw;
 	height: 90vw;
-	position: absolute;
-	overflow: hidden;
+	position: fixed;
 }
 @media (orientation: landscape){
 	section#board{
