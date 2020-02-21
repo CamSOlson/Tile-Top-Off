@@ -379,7 +379,7 @@ function move(direction, allTheWay){
 		}
 	} while (allTheWay);
 	if ("vibrate" in navigator && vibrate){
-		navigator.vibrate(10);
+		navigator.vibrate(100);
 	}
 }
 
@@ -487,7 +487,7 @@ function swipeMovement(element, callback){
 	threshold = 50, //min dist
     restraint = 50, //max deviation
 	allowedTime = 300, //max time
-	holdTime = 500, //Time to hold for full move
+	holdTime = 250, //Time to hold for full move
 	holdThreshold = 10, //Num of pixels user can move while counting as holding
 	holdSwipeEvent, holdSwipe = false, elapsedTime, startTime,
     swipeEvent = callback || function(swipeDir, held){};
@@ -506,6 +506,7 @@ function swipeMovement(element, callback){
 			holdIndicator.classList.add("active");
 		}, holdTime);
 		updateHoldIndicator();
+		holdSwipe = false;
     }, {passive: true});
   
     touchElem.addEventListener("touchmove", function(e){
@@ -523,6 +524,7 @@ function swipeMovement(element, callback){
 				//Moved too much, cancel hold swipe
 				clearTimeout(holdSwipeEvent);
 				holdIndicator.classList.remove("active");
+				holdSwipe = false;
 			}else{
 				startTime = new Date().getTime();
 			}
