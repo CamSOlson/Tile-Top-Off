@@ -35,6 +35,7 @@ section#board{
 	width: 90vw;
 	height: 90vw;
 	position: absolute;
+	overflow: hidden;
 }
 @media (orientation: landscape){
 	section#board{
