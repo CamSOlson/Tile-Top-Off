@@ -1,7 +1,5 @@
 var tempBoardSize = 5;
 var tempObstacleAmount = 0.5;
-var localStorage;
-var useLocalStorage = false;
 
 function toggleStartDropDowns(){
 	let dropDowns = document.querySelectorAll("div.start-drop-down");
@@ -36,23 +34,14 @@ function closeStartDropDown(dropDown){
 	dropDown.classList.remove("open");
 }
 
-window.addEventListener("load", function(){
-	initLocalStorage();
+window.addEventListener("load", function() {
+	tempBoardSize = customBoardSize;
+	tempObstacleAmount = customPathComplexity;
 
-	if (useLocalStorage){
-		tempBoardSize = localStorage.boardSize;
-		tempObstacleAmount = localStorage.pathComplexity;
-	}
-
-	document.querySelector("input#board-size-slider").value = parent.tilesWide;
-	document.querySelector("output[for=board-size-slider]").innerHTML = parent.tilesWide;
-	document.querySelector("input#path-complexity-slider").value = parent.pathComplexity;
-	document.querySelector("output[for=path-complexity-slider]").innerHTML = parent.pathComplexity;
-	
 	document.querySelector("input#board-size-slider").value = tempBoardSize;
-	onBoardSizeSliderInput();
-	document.querySelector("input#path-complexity-slider").value = tempObstacleAmount;
-	onObstacleSliderInput();
+	document.querySelector("output[for=board-size-slider]").innerHTML = tempBoardSize;
+	document.querySelector("input#path-complexity-slider").value = parent.tempObstacleAmount;
+	document.querySelector("output[for=path-complexity-slider]").innerHTML = tempObstacleAmount;
 });
 
 function onBoardSizeSliderInput(){
@@ -67,5 +56,7 @@ function onObstacleSliderInput(){
 
 function applyCustomOptions(){
 	setBoardSize(tempBoardSize);
+	setCustomBoardSize(tempBoardSize);
 	setPathComplexity(tempObstacleAmount);
+	setCustomPathComplexity(tempObstacleAmount);
 }

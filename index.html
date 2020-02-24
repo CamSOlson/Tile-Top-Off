@@ -20,10 +20,10 @@
 		<link rel="apple-touch-icon" href="/media/images/icons/icon-512x512.png">
 
 		<script src="/scripts/popup.js"></script>
-		<script src="/scripts/menus/start.js"></script>
 		<script src="/scripts/menu.js"></script>
 		<script src="/scripts/game.js"></script> 
 		<script src="/scripts/install.js"></script>
+		<script src="/scripts/menus/start.js"></script>
 
 		<script>
 			if ("serviceWorker" in navigator) {
@@ -51,6 +51,8 @@
 		<section id="start-screen">
 			<h1>Tile Top Off</h1>
 			<nav id="start-buttons">
+
+				<!--Play-->
 				<button id="start-play" onclick="closePopup(); toggleStartDropDown(document.querySelector('div#play-options')); closeMenu();">Play</button>
 				<div id="play-options" class="start-drop-down">
 					<h2>Quick Play</h2>
@@ -74,6 +76,15 @@
 					</section>
 					<button id="start-custom-game" onclick="closePopup(); setDifficulty(-1); applyCustomOptions(); beginGame(); closeMenu(); closeStartDropDowns();">Start Custom Game</button>
 				</div>
+
+				<!--High Scores-->
+				<button id="start-high-scores" onclick="closePopup(); toggleStartDropDown(document.querySelector('div#high-scores')); closeMenu();">High Scores</button>
+				<div id="high-scores" class="start-drop-down">
+					<p>Easy: <span id="high-score-easy">0</span></p>
+					<p>Normal: <span id="high-score-norm">0</span></p>
+					<p>Hard: <span id="high-score-hard">0</span></p>
+				</div>
+
 				<button id="start-instruction" onclick="closePopup(); showInstructionPopup(); closeMenu();">How to Play</button>
 				<button id="start-options" onclick="closePopup(); showOptionsPopup(); closeMenu();">Options</button>
 				<div id="start-install-prompt" class="hide-on-install" hidden>

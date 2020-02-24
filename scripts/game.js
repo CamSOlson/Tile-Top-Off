@@ -1,10 +1,12 @@
 var tileSize = "100%";
 
 var tilesWide = 5;
+var customBoardSize = 5;
 var tilesTall = 5;
 var obstacles = 0;
 var tilesFilled = 0;
 var pathComplexity = 0.5;
+var customPathComplexity = 0.5;
 
 var tiles = [[]];
 var playerTile;
@@ -23,6 +25,9 @@ var tileDiv;
 
 var difficulty;
 var score = 0;
+var highScoreEasy = 0;
+var highScoreNorm = 0;
+var highScoreHard = 0;
 
 var gameOver = false;
 var transition = false;
@@ -49,9 +54,6 @@ window.addEventListener("load", function(){
 	startScreen = document.querySelector("section#start-screen");
 
 	initLocalStorage();
-	initHighScore();
-	initBoardSize();
-	initPathComplexity();	
 
 	window.addEventListener("keydown", function(e){
 		e = e || window.event;
@@ -90,8 +92,9 @@ window.addEventListener("load", function(){
 
 function showStartScreen(){
 	starting = true;
-	startScreen.classList.remove("hidden");
 	closeStartDropDowns();
+	updateHighScoreSpans();
+	startScreen.classList.remove("hidden");
 }
 
 function hideStartScreen(){
@@ -102,6 +105,7 @@ function hideStartScreen(){
 function beginGame(){
 	starting = false;
 	gameOver = false;
+	score = 0;
 	loadGame();
 	hideStatus();
 	closePopup();
@@ -139,33 +143,34 @@ function initLocalStorage(){
 	try{
 		localStorage = window.localStorage;
 		useLocalStorage = true;
+
+		//High scores
+		if (localStorage.highScoreEasy === undefined){
+			localStorage.highScoreEasy = 0;
+		}
+		highScoreEasy = Number(localStorage.highScoreEasy);
+		if (localStorage.highScoreNorm === undefined){
+			localStorage.highScoreNorm = 0;
+		}
+		highScoreNorm = Number(localStorage.highScoreNorm);
+		if (localStorage.highScoreHard === undefined){
+			localStorage.highScoreHard = 0;
+		}
+		highScoreHard = Number(localStorage.highScoreHard);
+
+		//Board size
+		if (localStorage.customBoardSize === undefined){
+			localStorage.customBoardSize = 5;
+		}
+		customBoardSize = Math.min(localStorage.customBoardSize, 10);
+
+		//Path complexity
+		if (localStorage.customPathComplexity === undefined){
+			localStorage.customPathComplexity = 0.5;
+		}
+		customPathComplexity = Math.min(localStorage.customPathComplexity, 0.70);
 	}catch(e){
-
-	}
-}
-
-function initHighScore(){
-	if (useLocalStorage){
-		//Setup high score
-		if (localStorage.highscoreEasy === undefined){
-			localStorage.highscoreEasy = 0;
-		}
-		statusSub.innerHTML = statusSub.innerHTML.replace("%hse", localStorage.highscoreEasy);
-		if (localStorage.highscoreNormal === undefined){
-			localStorage.highscoreNormal = 0;
-		}
-		statusSub.innerHTML = statusSub.innerHTML.replace("%hsn", localStorage.highscoreNormal);
-		if (localStorage.highscoreHard === undefined){
-			localStorage.highscoreHard = 0;
-		}
-		statusSub.innerHTML = statusSub.innerHTML.replace("%hsh", localStorage.highscoreHard);
-
-	}else{
-		//No high score storage
-		statusSub.innerHTML = statusSub.innerHTML.replace("%hse", "No high score available");
-		statusSub.innerHTML = statusSub.innerHTML.replace("%hsn", "No high score available");
-		statusSub.innerHTML = statusSub.innerHTML.replace("%hsh", "No high score available");
-
+		console.log(e);
 	}
 }
 
@@ -191,38 +196,57 @@ function setDifficulty(dif){
 	}
 }
 
-function initBoardSize(){
-	if (useLocalStorage){
-		if (localStorage.boardSize === undefined){
-			localStorage.boardSize = 5;
-		}
-		tilesWide = Math.min(localStorage.boardSize, 12);
-		tilesTall = Math.min(localStorage.boardSize, 12);
-	}
-}
-
 function setBoardSize(size){
-	if (useLocalStorage){
-		localStorage.boardSize = size;
-	}
 	tilesWide = size;
 	tilesTall = size;
 }
 
-function initPathComplexity(){
+function setCustomBoardSize(size){
 	if (useLocalStorage){
-		if (localStorage.pathComplexity === undefined){
-			localStorage.pathComplexity = 0.5;
-		}
-		pathComplexity = Math.min(localStorage.pathComplexity, 0.70);
+		localStorage.customBoardSize = size;
 	}
 }
 
 function setPathComplexity(amount){
-	if (useLocalStorage){
-		localStorage.pathComplexity = amount;
-	}
 	pathComplexity = amount;
+}
+
+function setCustomPathComplexity(amount){
+	if (useLocalStorage){
+		localStorage.customPathComplexity = amount;
+	}
+}
+
+function updateHighScore(currentScore, currentDifficulty){
+	switch (currentDifficulty){
+		case 0:
+			//Easy
+			if (useLocalStorage && score > Number(localStorage.highScoreEasy)){
+				localStorage.highScoreEasy = currentScore;
+			}
+			highScoreEasy = currentScore;
+			break;
+		case 1:
+			//Normal
+			if (useLocalStorage && score > Number(localStorage.highScoreNorm)){
+				localStorage.highScoreNorm = currentScore;
+			}
+			highScoreNorm = currentScore;
+			break;
+		case 2:
+			//Hard
+			if (useLocalStorage && score > Number(localStorage.highScoreHard)){
+				localStorage.highScoreHard = currentScore;
+			}
+			highScoreHard = currentScore;
+			break;
+	}
+}
+
+function updateHighScoreSpans(){
+	document.querySelector("span#high-score-easy").innerHTML = highScoreEasy;
+	document.querySelector("span#high-score-norm").innerHTML = highScoreNorm;
+	document.querySelector("span#high-score-hard").innerHTML = highScoreHard;
 }
 
 function getAdjacentTiles(x, y){
@@ -334,6 +358,7 @@ function update(key, shift){
 				}else{
 					gameOver = true;
 					showStatus("GAME OVER", "#FF0000", "Stages complete: " + score + "<br><br>Move to continue...", "#FFC8C8", "rgba(0.5, 0.5, 0.5, 0.5)");
+					updateHighScore(score, difficulty);
 					score = 0;
 					if ("vibrate" in window.navigator && vibrate){
 						window.navigator.vibrate(500);
@@ -351,29 +376,6 @@ function fadeToNewStage(){
 	gameBoard.appendChild(cloneBoard);
 	setTimeout(function(){cloneBoard.classList.add("fade-out");}, 5);
 	setTimeout(function(){cloneBoard.parentNode.removeChild(cloneBoard);}, 505);
-}
-
-function updateHighScore(currentScore, currentDifficulty){
-	switch (currentDifficulty){
-		case 0:
-			//Easy
-			if (useLocalStorage && score > Number(localStorage.highscoreEasy)){
-				localStorage.highscoreEasy = currentScore;
-			}		
-			break;
-		case 1:
-			if (useLocalStorage && score > Number(localStorage.highscoreNormal)){
-				localStorage.highscoreNormal = currentScore;
-			}	
-			//Normal
-			break;
-		case 2:
-			//Hard
-			if (useLocalStorage && score > Number(localStorage.highscoreHard)){
-				localStorage.highscoreHard = currentScore;
-			}	
-			break;
-	}
 }
 
 function toggleGameInput(){

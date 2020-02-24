@@ -193,6 +193,9 @@ div.start-drop-down.open{
 div.start-drop-down.open#play-options{
 	height: 23rem;
 }
+div.start-drop-down.open#high-scores{
+	height: 7rem;
+}
 div.start-drop-down h2{
 	margin: 1rem 0 0.5rem 0;
 }
