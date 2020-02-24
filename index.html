@@ -19,10 +19,12 @@
 		<link rel="manifest" href="/public/manifest.json">
 		<link rel="apple-touch-icon" href="/media/images/icons/icon-512x512.png">
 
-		<script src="/scripts/game.js"></script> 
 		<script src="/scripts/popup.js"></script>
+		<script src="/scripts/menus/start.js"></script>
 		<script src="/scripts/menu.js"></script>
+		<script src="/scripts/game.js"></script> 
 		<script src="/scripts/install.js"></script>
+
 		<script>
 			if ("serviceWorker" in navigator) {
 				window.addEventListener("load", () => {
@@ -43,7 +45,43 @@
 				</div>
 			</section>
 			<div id="hold-indicator"></div>
+
 		</main>
+		
+		<section id="start-screen">
+			<h1>Tile Top Off</h1>
+			<nav id="start-buttons">
+				<button id="start-play" onclick="closePopup(); toggleStartDropDown(document.querySelector('div#play-options')); closeMenu();">Play</button>
+				<div id="play-options" class="start-drop-down">
+					<h2>Quick Play</h2>
+					<section id="quick-play-difficulties" class="start-drop-down-section">
+						<button id="start-quick-play-easy" onclick="closePopup(); setDifficulty(0); beginGame(); closeMenu(); closeStartDropDowns();">Easy</button>
+						<button id="start-quick-play-norm" onclick="closePopup(); setDifficulty(1); beginGame(); closeMenu(); closeStartDropDowns();">Normal</button>
+						<button id="start-quick-play-hard" onclick="closePopup(); setDifficulty(2); beginGame(); closeMenu(); closeStartDropDowns();">Hard</button>	
+					</section>
+					<h2>Custom Game</h2>
+					<section id="custom-game-settings" class="start-drop-down-section">
+						<div class="options-section slider-container">
+							<label for="board-size-slider">Board Size:</label>
+							<output name="board-size" for="board-size-slider"></output>
+							<input type="range" min="2" max="10" value="5" class="slider" id="board-size-slider" oninput="onBoardSizeSliderInput()">
+						</div>
+						<div class="options-section slider-container">
+							<label for="path-complexity-slider">Path Complexity:</label>
+							<output name="path-complexity" for="path-complexity-slider"></output>
+							<input type="range" min="0.05" max="0.70" value="0.5" step="0.01" class="slider" id="path-complexity-slider" oninput="onObstacleSliderInput()">
+						</div>
+					</section>
+					<button id="start-custom-game" onclick="closePopup(); setDifficulty(-1); applyCustomOptions(); beginGame(); closeMenu(); closeStartDropDowns();">Start Custom Game</button>
+				</div>
+				<button id="start-instruction" onclick="closePopup(); showInstructionPopup(); closeMenu();">How to Play</button>
+				<button id="start-options" onclick="closePopup(); showOptionsPopup(); closeMenu();">Options</button>
+				<div id="start-install-prompt" class="hide-on-install" hidden>
+					<p>Tile Top Off can be installed on your device and played offline!</p>
+					<button id="start-install" onclick="install();">Install</button>	
+				</div>
+			</nav>
+		</section>
 
 		<section id="popup" class="hidden">
 			<a id="exit-popup" onclick="closePopup()"><div class="exit-arrow"></div></a>
@@ -56,10 +94,11 @@
 			</div>
 
 			<nav>
+				<a id="exit-to-start-button" onclick="closePopup(); showStartScreen(); closeMenu();">Main Menu</a>
 				<a id="instruction-button" onclick="closePopup(); showInstructionPopup(); closeMenu();">How to Play</a>
 				<a id="option-button" onclick="closePopup(); showOptionsPopup(); closeMenu();">Options</a>
 				<a id="reset-button" onclick="closePopup(); hideStatus(); resetGame(); closeMenu();">Reset</a>
-				<a id="install-button" onclick="install();" hidden>Install</a>
+				<a id="install-button" class="hide-on-install" onclick="install();" hidden>Install</a>
 			</nav>
 		</section>
 	</body>

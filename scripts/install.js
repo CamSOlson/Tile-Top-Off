@@ -1,12 +1,14 @@
-var installButton;
+var hideOnInstallElems;
 var deferredInstallPrompt;
 
 window.addEventListener("load", function(){
-	installButton = document.querySelector("a#install-button");
+	hideOnInstallElems = document.querySelectorAll("*.hide-on-install");
 
 	window.addEventListener("beforeinstallprompt", function(event){
 		deferredInstallPrompt = event;
-		installButton.removeAttribute("hidden");	
+		for (let elem of hideOnInstallElems){
+			elem.removeAttribute("hidden");
+		}
 	});
 	
 	window.addEventListener("appinstalled", function(event){
@@ -16,8 +18,12 @@ window.addEventListener("load", function(){
 
 function install(){
 	deferredInstallPrompt.prompt();
-	event.srcElement.setAttribute("hidden", true);
 	deferredInstallPrompt.userChoice.then((choice) => {
+		if (choice.outcome === "accepted"){
+			for (let elem of hideOnInstallElems){
+				elem.setAttribute("hidden", true);
+			}
+		}
 		deferredInstallPrompt = null;
 	});
 }

@@ -21,6 +21,7 @@ var statusMain;
 var statusSub;
 var tileDiv;
 
+var difficulty;
 var score = 0;
 
 var gameOver = false;
@@ -33,10 +34,9 @@ var vibrate = true;
 var mainGame;
 var gameBoard;
 var holdIndicator;
+var startScreen;
 
 var localStorage;
-
-var difficulty;
 
 window.addEventListener("load", function(){
 	mainGame = document.querySelector("main#game");
@@ -46,18 +46,17 @@ window.addEventListener("load", function(){
 	statusSub = document.querySelector("p#statusSub");
 	tileDiv = document.querySelector("div#tiles");
 	holdIndicator = document.querySelector("div#hold-indicator");
+	startScreen = document.querySelector("section#start-screen");
 
 	initLocalStorage();
 	initHighScore();
 	initBoardSize();
 	initPathComplexity();	
 
-	showStart();
-
-	window.onkeydown = function(e){
+	window.addEventListener("keydown", function(e){
 		e = e || window.event;
 		update(e.keyCode);
-	}
+	});
 	
 	gameBoard.addEventListener("click", function(e){
 		let rect = gameBoard.getBoundingClientRect();
@@ -84,8 +83,30 @@ window.addEventListener("load", function(){
 					break;
 			}
         }
-    });
+	});
+	
+	showStartScreen();
 });
+
+function showStartScreen(){
+	starting = true;
+	startScreen.classList.remove("hidden");
+	closeStartDropDowns();
+}
+
+function hideStartScreen(){
+	starting = false;
+	startScreen.classList.add("hidden");
+}
+
+function beginGame(){
+	starting = false;
+	gameOver = false;
+	loadGame();
+	hideStatus();
+	closePopup();
+	hideStartScreen();
+}
 
 function loadGame(){		
 	generateTiles();
@@ -263,21 +284,19 @@ function touchMove(element, x, y){
 
 function update(key, shift){
 	if (!shift){
-		shift = window.event.shiftKey;
+		if (window.event !== undefined){
+			shift = window.event.shiftKey;
+		}
 	}
 	if (!blockInput){
 		if (gameOver && !transition){
 			if (key == "38" || key == "40" || key == "37" || key == "39" || key == "87" || key == "83" || key == "65" || key == "68") {
-				starting = true;
-				showStart();
+				showStartScreen();
 				gameOver = false;
-				loadGame();
 			}
 		}else if (starting){
 			if (key == "38" || key == "40" || key == "37" || key == "39" || key == "87" || key == "83" || key == "65" || key == "68") {
-				starting = false;
-				loadGame();
-				hideStatus();
+				beginGame();
 			}
 		}else if (!transition && !starting){
 			//Check movements
@@ -367,12 +386,6 @@ function enableGameInput(){
 
 function disableGameInput(){
 	blockInput = true;
-}
-
-function showStart(){
-	//showStatus("Tile Top Off", "White", "<a href='https://camsolson.com' target='-blank'>Cam Olson</a><br>v. 1.0<br><br><br>You are the <span style='color:#fb0000' id='player-instructions'><span style='font-size:2rem;font-style:normal;'>■</span> Colored Tile</span><br><br>Fill in the <span style='color:#333333'><span style='font-size:2rem;font-style:normal;'>■</span> Empty Tiles</span><br><br>Go around the randomly generated <span style='color:#888888'><span style='font-size:2rem;font-style:normal;'>■</span> Walls</span><br><br><br>Use <span style='color:#C0C0C0'>[W] [A] [S]</span> and <span style='color:#C0C0C0'>[D]</span>, the <span style='color:#C0C0C0'>Arrow Keys</span>, or <span style='color:#C0C0C0'>Swipe</span> in the direction you want to move<br><br>No <span style='color:#C0C0C0'>backtracking</span><br><br>The board gets bigger the longer you play<br><br><br><span style='font-size:1.5rem;'>High score: @hs</span><br><br><br><span style='color:#C0C0C0'>Move to start...</span>", "White", "rgba(0, 0, 0, 1)");
-	showStatus("Tile Top Off", "White", "<br>Your high scores:<br><br>Easy: %hse<br><br>Normal: %hsn<br><br>Hard: %hsh", "White", "Black");
-	initHighScore();
 }
 
 function move(direction, allTheWay){
@@ -579,6 +592,7 @@ function generateTiles() {
 	
 	//Clear board
 	tileDiv.innerHTML = "";
+	tiles = [[]];
 	//Populate game board with tiles. Iterate through tile width and height
 	for (let x = 0; x < tilesWide; x++){
 		boardColumns += " " + tileSize;
