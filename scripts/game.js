@@ -93,7 +93,6 @@ window.addEventListener("load", function(){
 function showStartScreen(){
 	starting = true;
 	closeStartDropDowns();
-	updateHighScoreSpans();
 	startScreen.classList.remove("hidden");
 }
 
@@ -241,12 +240,6 @@ function updateHighScore(currentScore, currentDifficulty){
 			highScoreHard = currentScore;
 			break;
 	}
-}
-
-function updateHighScoreSpans(){
-	document.querySelector("span#high-score-easy").innerHTML = highScoreEasy;
-	document.querySelector("span#high-score-norm").innerHTML = highScoreNorm;
-	document.querySelector("span#high-score-hard").innerHTML = highScoreHard;
 }
 
 function getAdjacentTiles(x, y){

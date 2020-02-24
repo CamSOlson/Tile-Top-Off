@@ -36,6 +36,12 @@ function showOptionsPopup(){
     showPopup("/menus/options.html");
 }
 
+function showHighScorePopup(){
+    showExitButton();
+    popup.style.backgroundColor = defaultBackgroundColor;
+    showPopup("/menus/highscores.html");
+}
+
 function hideExitButton(){
     exitButton.style.visibility = "hidden";
 }

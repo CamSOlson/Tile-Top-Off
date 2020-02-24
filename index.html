@@ -78,12 +78,7 @@
 				</div>
 
 				<!--High Scores-->
-				<button id="start-high-scores" onclick="closePopup(); toggleStartDropDown(document.querySelector('div#high-scores')); closeMenu();">High Scores</button>
-				<div id="high-scores" class="start-drop-down">
-					<p>Easy: <span id="high-score-easy">0</span></p>
-					<p>Normal: <span id="high-score-norm">0</span></p>
-					<p>Hard: <span id="high-score-hard">0</span></p>
-				</div>
+				<button id="start-high-scores" onclick="closePopup(); showHighScorePopup(); closeMenu();">High Scores</button>
 
 				<button id="start-instruction" onclick="closePopup(); showInstructionPopup(); closeMenu();">How to Play</button>
 				<button id="start-options" onclick="closePopup(); showOptionsPopup(); closeMenu();">Options</button>
@@ -107,6 +102,7 @@
 			<nav>
 				<a id="exit-to-start-button" onclick="closePopup(); showStartScreen(); closeMenu();">Main Menu</a>
 				<a id="instruction-button" onclick="closePopup(); showInstructionPopup(); closeMenu();">How to Play</a>
+				<a id="high-score-button" onclick="closePopup(); showHighScorePopup(); closeMenu();">High Scores</a>
 				<a id="option-button" onclick="closePopup(); showOptionsPopup(); closeMenu();">Options</a>
 				<a id="reset-button" onclick="closePopup(); hideStatus(); resetGame(); closeMenu();">Reset</a>
 				<a id="install-button" class="hide-on-install" onclick="install();" hidden>Install</a>
