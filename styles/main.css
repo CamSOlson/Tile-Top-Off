@@ -22,8 +22,13 @@ main#game{
 	z-index: 0;
 	position: fixed;
 }
-#game>h1{
+main#game>h1{
 	color: White;
+}
+main#game>label{
+	color: White;
+	position: relative;
+	font-size: 0.75rem;
 }
 a.tile{
 	transition: 0.1s top, 0.1s left, 0.1s background-color 0.05s;
@@ -38,7 +43,7 @@ a.tile[data-tiletype = "player"]{
 section#board{
 	width: 90vw;
 	height: 90vw;
-	position: fixed;
+	position: relative;
 }
 @media (orientation: landscape){
 	section#board{

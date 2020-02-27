@@ -26,10 +26,8 @@
 		<script src="/scripts/game.js"></script> 
 		<script src="/scripts/install.js"></script>
 		<script src="/scripts/menus/start.js"></script>
-
 		<script src="/scripts/menus/highscores.js"></script>
 		<script src="/scripts/menus/options.js"></script>
-
 		<script>
 			if ("serviceWorker" in navigator) {
 				window.addEventListener("load", () => {
@@ -42,6 +40,11 @@
 	</head>
 	<body>
 		<main id="game">
+			<label type="text" id="game-label">
+				Difficulty: <span id="difficulty">Easy</span>
+				&nbsp &nbsp
+				Score: <span id="score">0</span>
+			</label>
 			<section id="board">
 				<div class="tiles" id="tiles"></div>
 				<div id="status" class="status-shown" style="background-color:Black">
@@ -50,7 +53,6 @@
 				</div>
 			</section>
 			<div id="hold-indicator"></div>
-
 		</main>
 		
 		<section id="start-screen">
@@ -68,7 +70,7 @@
 		</section>
 
 		<section id="popup" class="hidden">
-			<a id="exit-popup" onclick="closePopup()"><div class="exit-arrow"></div></a>
+			<a id="exit-popup" onclick="closePopup();"><div class="exit-arrow"></div></a>
 			<section id="popup-content">
 				<section id="play-content" style="display: none;">
 					<h2>Quick Play</h2>
@@ -150,7 +152,7 @@
 		</section>
 
 		<section id="menu">
-			<div id="icon" onclick="toggleMenu()">
+			<div id="icon" onclick="toggleMenu();">
 				<a></a><a></a><a></a>
 			</div>
 
@@ -159,7 +161,7 @@
 				<a id="instruction-button" onclick="closePopup(); showInstructionPopup(); closeMenu();">How to Play</a>
 				<a id="high-score-button" onclick="closePopup(); showHighScorePopup(); closeMenu();">High Scores</a>
 				<a id="option-button" onclick="closePopup(); showOptionsPopup(); closeMenu();">Options</a>
-				<a id="reset-button" onclick="closePopup(); hideStatus(); resetGame(); closeMenu();">Reset</a>
+				<!-- <a id="reset-button" onclick="closePopup(); hideStatus(); resetGame(); closeMenu();">Reset</a> -->
 				<a id="install-button" class="hide-on-install" onclick="install();" hidden>Install</a>
 			</nav>
 		</section>

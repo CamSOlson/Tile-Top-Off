@@ -27,17 +27,6 @@ window.addEventListener("load", function(e){
     closeAllPopups();
 });
 
-// function fetchHTMLData(file, callback){
-//     let xhr = new XMLHttpRequest();
-//     xhr.open("GET", file, true);
-//     xhr.onreadystatechange = function() {
-//         if (this.readyState === 4) {
-//             callback(this.responseText);
-//         }
-//     };
-//     xhr.send();
-// }
-
 function showPopup(popupElem){
     disableGameInput();
     setPopup(popupElem);

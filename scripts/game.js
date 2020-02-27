@@ -40,6 +40,8 @@ var mainGame;
 var gameBoard;
 var holdIndicator;
 var startScreen;
+var difficultySpan;
+var scoreSpan;
 
 var localStorage;
 
@@ -52,6 +54,8 @@ window.addEventListener("load", function(){
 	tileDiv = document.querySelector("div#tiles");
 	holdIndicator = document.querySelector("div#hold-indicator");
 	startScreen = document.querySelector("section#start-screen");
+	difficultySpan = document.querySelector("label#game-label>span#difficulty");
+	scoreSpan = document.querySelector("label#game-label>span#score");
 
 	initLocalStorage();
 
@@ -104,6 +108,21 @@ function beginGame(){
 	starting = false;
 	gameOver = false;
 	score = 0;
+	scoreSpan.innerHTML = 0;
+	switch (difficulty){
+		default:
+			difficultySpan.innerHTML = "Custom";
+			break;
+		case 0:
+			difficultySpan.innerHTML = "Easy";
+			break;
+		case 1:
+			difficultySpan.innerHTML = "Normal";
+			break;
+		case 2:
+			difficultySpan.innerHTML = "Hard";
+			break;
+	}
 	loadGame();
 	hideStatus();
 	closePopup();
@@ -223,7 +242,8 @@ function setCustomPathComplexity(complexity){
 	}
 }
 
-function updateHighScore(currentScore, currentDifficulty){
+function updateScore(currentScore, currentDifficulty){
+	scoreSpan.innerHTML = currentScore;
 	switch (currentDifficulty){
 		case 0:
 			//Easy
@@ -347,7 +367,7 @@ function update(key, shift){
 					score++;
 					//showStatus("STAGE COMPLETE", "#00FF00", "Score: " + score + "<br><br>Generating next level...", "#C8FFC8", "Black");
 					//Update high score in storage
-					updateHighScore(score, difficulty);
+					updateScore(score, difficulty);
 					fadeToNewStage();
 					generateTiles();
 					transition = false;
@@ -361,7 +381,7 @@ function update(key, shift){
 				}else{
 					gameOver = true;
 					showStatus("GAME OVER", "#FF0000", "Stages complete: " + score + "<br><br>Move to continue...", "#FFC8C8", "rgba(0.5, 0.5, 0.5, 0.5)");
-					updateHighScore(score, difficulty);
+					updateScore(score, difficulty);
 					score = 0;
 					if ("vibrate" in window.navigator && vibration){
 						window.navigator.vibrate(500);
