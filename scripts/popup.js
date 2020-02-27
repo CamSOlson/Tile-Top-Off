@@ -7,6 +7,7 @@ const defaultBackgroundColor = "#33333360";
 var tempBoardSize;
 var tempObstacleAmount;
 
+var playPopup;
 var highscorePopup;
 var instructionPopup;
 var optionsPopup;
@@ -19,6 +20,11 @@ window.addEventListener("load", function(e){
     highscorePopup = document.querySelector("section#popup-content>section#highscore-content");
     instructionPopup = document.querySelector("section#popup-content>section#instruction-content");
     optionsPopup = document.querySelector("section#popup-content>section#options-content");
+    playPopup = document.querySelector("section#popup-content>section#play-content");
+
+    popup.style.backgroundColor = defaultBackgroundColor;
+    showExitButton();
+    closeAllPopups();
 });
 
 // function fetchHTMLData(file, callback){
@@ -34,19 +40,20 @@ window.addEventListener("load", function(e){
 
 function showPopup(popupElem){
     disableGameInput();
-    setPopup(popupElem)
+    setPopup(popupElem);
     popup.classList.remove("hidden");
 }
 
 function setPopup(popupElem){
     closeAllPopups();
-    popupElem.removeAttribute("hidden");
+    popupElem.style.display = "";
 }
 
 function closeAllPopups(){
-    highscorePopup.setAttribute("hidden", true);
-    instructionPopup.setAttribute("hidden", true);
-    optionsPopup.setAttribute("hidden", true);
+    playPopup.style.display = "none";
+    highscorePopup.style.display = "none";
+    instructionPopup.style.display = "none";
+    optionsPopup.style.display = "none";
 }
 
 function closePopup(){
@@ -54,22 +61,20 @@ function closePopup(){
     popup.classList.add("hidden");
 }
 
+function showPlayPopup(){
+    showPopup(playPopup);
+}
+
 function showInstructionPopup(){
-    showExitButton();
-    popup.style.backgroundColor = defaultBackgroundColor;
     showPopup(instructionPopup);
 }
 
 function showOptionsPopup(){
-    showExitButton();
-    popup.style.backgroundColor = defaultBackgroundColor;
     showPopup(optionsPopup);
     updateToggleSwitches();
 }
 
 function showHighScorePopup(){
-    showExitButton();
-    popup.style.backgroundColor = defaultBackgroundColor;
     showPopup(highscorePopup);
     updateHighScoreSpans();
 }

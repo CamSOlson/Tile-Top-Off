@@ -92,7 +92,6 @@ window.addEventListener("load", function(){
 
 function showStartScreen(){
 	starting = true;
-	closeStartDropDowns();
 	startScreen.classList.remove("hidden");
 }
 

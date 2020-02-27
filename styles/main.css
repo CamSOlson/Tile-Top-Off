@@ -151,12 +151,14 @@ section#start-screen>nav{
 	display: flex;
 	flex-direction: column;
 	max-width: 20rem;
-	width: (100% - 1rem);
+	width: calc(100% - 2rem);
 	position: relative;
-	padding: 0 1rem 1rem 1rem;
+	padding: 0;
 }
-section#start-screen nav button{
+section#start-screen button{
 	width: 100%;
+}
+button{
 	cursor: pointer;
 	margin: 0.5rem 0 0.5rem 0;
 	font-size: 1rem;
@@ -171,66 +173,40 @@ div.play-options{
 	display: flex;
 	flex-direction: column;
 }
-div.start-drop-down{
-	transition: 0.25s transform, 0.25s opacity, 0.25s visibility, 0.25s height, 0.25s margin;
-	transform: scaleY(0);
-	transform-origin: top;
-	opacity: 0;
-	visibility: hidden;
-	text-align: center;
-	position: relative;
-	height: 0;
-	background-color: #333333;
-	padding: 0.5rem;
-	margin: -1rem 0 0 0;
-}
-div.start-drop-down.open{
-	transform: scaleY(1);
-	opacity: 1;
-	visibility: visible;
-	margin: -0.5rem 0 0.5rem 0;
-}
-div.start-drop-down.open#play-options{
-	height: 23rem;
-}
-div.start-drop-down.open#high-scores{
-	height: 7rem;
-}
-div.start-drop-down h2{
-	margin: 1rem 0 0.5rem 0;
-}
-div.start-drop-down button{
-	height: 3rem;
+button#start-play{
+	height: 4rem;
 }
 section#quick-play-difficulties{
 	display: flex;
 	flex-direction: row;
 }
-section.start-drop-down-section{
-	margin: 1rem 0 1rem 0;
+section#quick-play-difficulties button{
+	width: 6rem;
 }
-div.start-drop-down button#start-quick-play-easy{
+button#start-quick-play-easy{
 	background-color: MediumSpringGreen;
 }
-div.start-drop-down button#start-quick-play-norm{
+button#start-quick-play-norm{
 	background-color: RoyalBlue;
 }
-div.start-drop-down button#start-quick-play-hard{
+button#start-quick-play-hard{
 	background-color: Crimson;
 }
-div.start-drop-down button#start-custom-game{
+button#start-custom-game{
 	background-color: #888888;
 }
 div#start-install-prompt{
 	margin: 2rem 0 0 0;
 	text-align: center;
+	width: 100%;
 }
 div#start-install-prompt p{
-	margin: 0.5rem;
+	margin: 0.5rem 0 0.5rem 0;
 	font-size: 0.75rem;
 }
 div#start-install-prompt button#start-install{
 	background-color: #888888;
+	width: 100%;
 }
 
 /*Menu*/
@@ -267,8 +243,8 @@ section#menu.open>nav{
 	transform: scaleX(1);
 }
 nav>a{
-	font-size: 2rem;
-	line-height: 2rem;
+	font-size: 1.5rem;
+	line-height: 1.5rem;
 	width: calc(100% - 1rem);
 	padding: 0.5rem 1rem 0.5rem 0rem;
 	text-align: right;
@@ -313,10 +289,14 @@ div#icon>a{
 		width: 2rem;
 	}
 	section#menu.open{
-		width: 15rem;
+		width: 10rem;
 	}
 	nav>a{
-		font-size: 2rem;
+		font-size: 1rem;
+		line-height: 1rem;
+	}
+	a#install-button{
+		line-height: 3rem;
 	}
 }
 
@@ -342,5 +322,3 @@ div#hold-indicator.active{
 	top: -3.5rem;
 	left: -3.5rem;
 }
-
-/*Popup*/
