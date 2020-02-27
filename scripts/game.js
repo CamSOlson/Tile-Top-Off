@@ -34,7 +34,7 @@ var transition = false;
 var starting = true;
 var useLocalStorage = false;
 var blockInput = false;
-var vibrate = true;
+var vibration = true;
 
 var mainGame;
 var gameBoard;
@@ -168,6 +168,12 @@ function initLocalStorage(){
 			localStorage.customPathComplexity = 0.5;
 		}
 		customPathComplexity = Math.min(localStorage.customPathComplexity, 0.70);
+
+		//Vibration
+		if (localStorage.vibration === undefined){
+			localStorage.vibration = true;
+		}
+		vibration = localStorage.vibration == "true";
 	}catch(e){
 		console.log(e);
 	}
@@ -201,6 +207,7 @@ function setBoardSize(size){
 }
 
 function setCustomBoardSize(size){
+	customBoardSize = size;
 	if (useLocalStorage){
 		localStorage.customBoardSize = size;
 	}
@@ -210,9 +217,10 @@ function setPathComplexity(amount){
 	pathComplexity = amount;
 }
 
-function setCustomPathComplexity(amount){
+function setCustomPathComplexity(complexity){
+	customPathComplexity = complexity;
 	if (useLocalStorage){
-		localStorage.customPathComplexity = amount;
+		localStorage.customPathComplexity = complexity;
 	}
 }
 
@@ -239,6 +247,13 @@ function updateHighScore(currentScore, currentDifficulty){
 			}
 			highScoreHard = currentScore;
 			break;
+	}
+}
+
+function setVibration(enabled){
+	vibration = enabled;
+	if (useLocalStorage){
+		localStorage.vibration = enabled;
 	}
 }
 
@@ -341,7 +356,7 @@ function update(key, shift){
 					fadeToNewStage();
 					generateTiles();
 					transition = false;
-					if ("vibrate" in window.navigator && vibrate){
+					if ("vibrate" in window.navigator && vibration){
 						window.navigator.vibrate(250);
 					}
 					//Set delayed reset
@@ -353,7 +368,7 @@ function update(key, shift){
 					showStatus("GAME OVER", "#FF0000", "Stages complete: " + score + "<br><br>Move to continue...", "#FFC8C8", "rgba(0.5, 0.5, 0.5, 0.5)");
 					updateHighScore(score, difficulty);
 					score = 0;
-					if ("vibrate" in window.navigator && vibrate){
+					if ("vibrate" in window.navigator && vibration){
 						window.navigator.vibrate(500);
 					}
 				}

@@ -1,16 +1,60 @@
-body{
-    background-color: Black;
-    font-family: sans-serif;
-    color: White;
-    padding: 1rem;
-    text-align: center;
+section#popup{
+	transition: 0.25s opacity, 0.25s visibility;
+	opacity: 1;
+	visibility: visible;
+	z-index: 5;
+	background-color: #33333360;
+	width: 100vw;
+	height: 100vh;
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	color: White;
 }
-
-main{
+div#options-section{
+	height: 2rem;
+}
+section#popup.hidden{
+	opacity: 0;
+	visibility: hidden;
+}
+section#popup>a#exit-popup{
+	font-size: 3rem;
+	position: fixed;
+	left: 0;
+	top: 0;
+	line-height: 3rem;
+	padding: 0.5rem;
+	cursor: pointer;
+	z-index: 20;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.exit-arrow {
+	width: 0;
+	height: 0;
+	border-top: 1.25rem solid transparent;
+	border-right: 2.5rem solid White;
+	border-bottom: 1.25rem solid transparent;
+	margin: 0.5rem;
+}
+section#popup>section#popup-content{
+	background-color: Black;
+	width: calc(100vw - 10rem);
+	height: calc(100vh - 10rem);
+	outline: none;
+	border: none;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
+	align-items: center;
+	background-color: Black;
+	overflow-x: hidden;
+	overflow-y: auto;
 }
 
 h1{
@@ -27,7 +71,7 @@ span.control{
 	font-style: italic;
 }
 
-div.slider-container{
+div.toggle-container, div.slider-container{
 	width: 90%;
 	display: flex;
 	flex-direction: row;
@@ -68,6 +112,29 @@ figure.instruction-diagram div.progression{
 	justify-content: center;
 }
 @media only screen and (max-width: 600px) {
+	section#popup>section#popup-content{
+		width: 100vw;
+		height: 93vh;
+		text-align: center;
+		margin-top: auto;
+	}
+	section#popup>a#exit-popup{
+		font-size: 5vh;
+		height: 2rem;
+		width: 2rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0.5rem;
+	}
+	.exit-arrow {
+		width: 0;
+		height: 0;
+		border-top: 1rem solid transparent;
+		border-right: 2rem solid White;
+		border-bottom: 1rem solid transparent;
+		margin: 0.5rem;
+	}
 	figure.instruction-diagram img{
 		height: 6rem;
 		margin: 0.5rem;

@@ -15,6 +15,8 @@
 		<link rel="stylesheet" href="/styles/main.css">
 		<link rel="stylesheet" href="/styles/sliders.css">
 		<link rel="stylesheet" href="/styles/scrollbar.css">
+		<link rel="stylesheet" href="/styles/popup.css">
+		<link rel="stylesheet" href="/styles/toggle-switches.css">
 		<link rel="icon" href="/media/images/icons/icon-64x64.png">
 		<link rel="manifest" href="/public/manifest.json">
 		<link rel="apple-touch-icon" href="/media/images/icons/icon-512x512.png">
@@ -24,6 +26,9 @@
 		<script src="/scripts/game.js"></script> 
 		<script src="/scripts/install.js"></script>
 		<script src="/scripts/menus/start.js"></script>
+
+		<script src="/scripts/menus/highscores.js"></script>
+		<script src="/scripts/menus/options.js"></script>
 
 		<script>
 			if ("serviceWorker" in navigator) {
@@ -91,7 +96,61 @@
 
 		<section id="popup" class="hidden">
 			<a id="exit-popup" onclick="closePopup()"><div class="exit-arrow"></div></a>
-			<iframe id="popup-content" src=""></iframe>
+			<section id="popup-content">
+				<section id="highscore-content" hidden>
+					<h1>High Scores</h1>
+					<p>Easy: <span id="high-score-easy">Unavailable</span></p>
+					<p>Normal: <span id="high-score-norm">Unavailable</span></p>
+					<p>Hard: <span id="high-score-hard">Unavailable</span></p>	
+				</section>
+
+				<section id="instruction-content" hidden>
+					<h1>How to Play</h1>
+					<h2>Movement</h2>
+					<p>Use <span class="control">[W][A][S][D]</span>, the <span class="control">Arrow Keys</span>, or <span class="control">Tap</span> on the board in the direction you want to move in.</p>
+					<figure class="instruction-diagram">
+						<img src="../media/images/move-diagram.png" alt="Basic movement">
+						<span style="width: 3rem"></span>
+						<div class="progression">
+							<img src="../media/images/example-board.png" alt="Before move">
+							<a>🡆</a>
+							<img src="../media/images/example-board-move.png" alt="After move">    
+						</div>
+					</figure>
+					<p>Hold <span class="control">[SHIFT]</span> while moving or <span class="control">Swipe</span> in the direction you want to move in to continuously move in that direction, filling in all empty spaces until you hit an obstacle or your path.</p>
+					<figure class="instruction-diagram">
+						<img src="../media/images/full-move-diagram.png" alt="Fill move">
+						<span style="width: 3rem"></span>
+						<div class="progression">
+							<img src="../media/images/example-board.png" alt="Before move">
+							<a>🡆</a>
+							<img src="../media/images/example-board-fill-move.png" alt="After move">    
+						</div>
+					</figure>
+					<h2>Goal</h2>
+					<p>Fill all of the empty space on the board without moving over the same space twice.</p>
+					<p>You will need to find a path that hits every tile on the board.</p>
+					<figure class="instruction-diagram">
+						<img src="../media/images/example-board-path.png" alt="A solution path">
+					</figure>
+					<h2>Playing the Game</h2>
+					<p>Each round, the game will randomly generate a new level in the difficulty you have selected. Each level is guaranteed to be solvable, and may have multiple solutions.</p>
+					<p>If you make a wrong move, find yourself stuck, or want to retry a level, you can <span class="control">Reset</span> via the menu in the corner.</p>
+					<p>Large, complex levels can sometimes take a while to generate. If a level is taking too long to generate, the game will notify you of the issue with a browser message, where you can either choose to <span class="control">Generate a New Level</span> or <span class="control">Continue Attempting to Generate the Current Level</span>.</p>		
+				</section>
+
+				<section id="options-content" hidden>
+					<h1>Options</h1> 
+
+					<div id="vibration-toggle" class="toggle-container">
+						<label class="toggle-switch">
+							<input type="checkbox" name="vibration-toggle" id="vibration-toggle-switch" onclick="vibrationSwitchToggle();">
+							<span class="slider"></span>
+						</label>
+						<label for="vibration-toggle">Vibration</label>	
+					</div>
+				</section>
+			</section>
 		</section>
 
 		<section id="menu">
