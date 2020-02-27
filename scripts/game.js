@@ -325,10 +325,6 @@ function update(key, shift){
 				showStartScreen();
 				gameOver = false;
 			}
-		}else if (starting){
-			if (key == "38" || key == "40" || key == "37" || key == "39" || key == "87" || key == "83" || key == "65" || key == "68") {
-				beginGame();
-			}
 		}else if (!transition && !starting){
 			//Check movements
 			if (key == "38" || key == "87") {
