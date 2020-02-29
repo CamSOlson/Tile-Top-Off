@@ -9,11 +9,12 @@ var pathComplexity = 0.5;
 var customPathComplexity = 0.5;
 
 var tiles = [[]];
+var pastMoves = [[]];
 var playerTile;
 var startPos;
 var path;
 
-var defaultTileColor = "rgba(0, 0, 0, 0)";
+var defaultTileColor = "#00000000";
 var obstacleTileColor = "#888888";
 var playerColors = ["#ff2626", "#ff9326", "#ffff00", "#00ff40", "#0080ff", "#9326ff", "#ff73ff"];
 var playerTileColor = playerColors[0];
@@ -130,6 +131,7 @@ function beginGame(){
 }
 
 function loadGame(){		
+	pastMoves = [[]];
 	generateTiles();
 }
 
@@ -153,6 +155,7 @@ function resetGame(){
 	gameOver = false;
 	transition = false;
 	starting = false;
+	pastMoves = [[]];
 	hideStatus();
 }
 
@@ -365,8 +368,6 @@ function update(key, shift){
 				if (checkWinState()){
 					transition = true;
 					score++;
-					//showStatus("STAGE COMPLETE", "#00FF00", "Score: " + score + "<br><br>Generating next level...", "#C8FFC8", "Black");
-					//Update high score in storage
 					updateScore(score, difficulty);
 					fadeToNewStage();
 					generateTiles();
@@ -374,10 +375,6 @@ function update(key, shift){
 					if ("vibrate" in window.navigator && vibration){
 						window.navigator.vibrate(250);
 					}
-					//Set delayed reset
-					//setTimeout(function() {generateTiles();}, 500);
-					// setTimeout(hideStatus, 1500);
-					// setTimeout(function() {transition = false}, 1500);
 				}else{
 					gameOver = true;
 					showStatus("GAME OVER", "#FF0000", "Stages complete: " + score + "<br><br>Move to continue...", "#FFC8C8", "rgba(0.5, 0.5, 0.5, 0.5)");
@@ -414,10 +411,16 @@ function disableGameInput(){
 }
 
 function move(direction, allTheWay){
+	let moveID = pastMoves.length;
 	do {
 		let adjacentTiles = getAdjacentTiles(playerTile.dataset.x, playerTile.dataset.y);
 		if (adjacentTiles[direction] !== undefined){
-			allTheWay = movePlayer(playerTile, adjacentTiles[direction]) && allTheWay;
+			let fullMove = allTheWay;
+			let playerMoved = movePlayer(playerTile, adjacentTiles[direction]);
+			allTheWay = playerMoved && allTheWay;
+			if (playerMoved){
+				pastMoves.push([adjacentTiles[direction].dataset.x + ", " + adjacentTiles[direction].dataset.y, moveID, fullMove]);
+			}
 		}else{
 			allTheWay = false;
 		}
@@ -432,16 +435,132 @@ function movePlayer(playerTile, targetTile){
 		switchTiles(playerTile, targetTile);
 		//Set other tile to a "used" tile
 		targetTile.dataset.tiletype = "used";
-		targetTile.style.backgroundColor = getUsedTileColor();
+
+		let fromColor = getUsedTileColor(tilesFilled);
+		let toColor = getUsedTileColor(tilesFilled + 1);
+		let playerPos = [Number(playerTile.dataset.x), Number(playerTile.dataset.y)];
+		let currPos = [Number(targetTile.dataset.x), Number(targetTile.dataset.y)];
+		if (playerPos[0] > currPos[0]){
+			//Right
+			toSide = 1;
+		}else if (playerPos[0] < currPos[0]){
+			//Left
+			toSide = 3;
+		}else if (playerPos[1] > currPos[1]){
+			//Down
+			toSide = 2;
+		}else{
+			//Up
+			toSide = 0;
+		}
+		let prevMove = pastMoves[pastMoves.length - 1];
+		let fromSide = 0;
+		let toSize = 0;
+		let gradient;
+		if (prevMove !== undefined){
+			//Middle of path
+			prevMove = prevMove[0].split(", ");
+			let prevPos = [Number(prevMove[0]), Number(prevMove[1])];
+
+
+			if (prevPos[0] > currPos[0]){
+				//Right
+				fromSide = 1;
+			}else if (prevPos[0] < currPos[0]){
+				//Left
+				fromSide = 3;
+			}else if (prevPos[1] > currPos[1]){
+				//Down
+				fromSide = 2;
+			}else{
+				//Up
+				fromSide = 0;
+			}
+
+			gradient = createGradient(fromSide, toSide, fromColor, toColor);
+		}else{
+			//Beginning of path
+			fromSide = toSide - 2;
+			while (fromSide < 0){
+				fromSide += 4;
+			}
+			gradient = createGradient(fromSide, toSide, fromColor, toColor);
+		}
+
+		targetTile.style.backgroundColor = getUsedTileColor(tilesFilled);
+		//targetTile.style.backgroundImage = "conic-gradient(at 100% 0%, Red 50%, Blue 75%)";
+		targetTile.style.backgroundImage = gradient;
 		return true;
 	}else{
 		return false;
 	}
 }
 
-function getUsedTileColor(){
+function createGradient(fromSide, toSide, fromColor, toColor){
+	switch (fromSide){
+		case 0:
+			//From top
+			switch (toSide){
+				case 1:
+					//To right
+					return "conic-gradient(at 100% 0%, " + toColor + " 50%, " + fromColor + " 75%)";
+				case 2:
+					//To bottom
+					return "linear-gradient(to bottom, " + fromColor + ", " + toColor + ")";
+				case 3:
+					//To left
+					return "conic-gradient(at 0% 0%, " + fromColor + " 25%, " + toColor + " 50%)";
+			}
+			break;
+		case 1:
+			//From right
+			switch (toSide){
+				case 0:
+					//To top
+					return "conic-gradient(at 100% 0%, " + fromColor + " 50%, " + toColor + " 75%)";
+				case 2:
+					//To bottom
+					return "conic-gradient(at 100% 100%, " + toColor + " 75%, " + fromColor + " 100%)";
+				case 3:
+					//To left
+					return "linear-gradient(to left, " + fromColor + ", " + toColor + ")";
+			}
+			break;
+		case 2:
+			//From bottom
+			switch (toSide){
+				case 0:
+					//To top
+					return "linear-gradient(to top, " + fromColor + ", " + toColor + ")";
+				case 1:
+					//To right
+					return "conic-gradient(at 100% 100%, " + fromColor + " 75%, " + toColor + " 100%)";
+				case 3:
+					//To left
+					return "conic-gradient(at 0% 100%, " + toColor + " 0%, " + fromColor + " 25%)";
+			}
+			break;
+		case 3:
+			//From left
+			switch (toSide){
+				case 0:
+					//To top
+					return "conic-gradient(at 0% 0%, " + toColor + " 25%, " + fromColor + " 50%)";
+				case 1:
+					//To right
+					return "linear-gradient(to right, " + fromColor + ", " + toColor + ")";
+				case 2:
+					//To bottom
+					return "conic-gradient(at 0% 100%, " + fromColor + " 0%, " + toColor + " 25%)";
+			}
+			break;
+	}
+	return "linear-gradient(" + fromColor + ", " + toColor + ")";
+}
+
+function getUsedTileColor(moveNumber){
 	let max = tilesWide * tilesTall - obstacles;
-	let percentage = tilesFilled / max;
+	let percentage = moveNumber / max;
 	percentage = percentage / 2 + 0.5;
 	let rgb = hexToRGB(playerTileColor);
 	return "rgba(" + Math.min(255, (percentage * rgb.r) * 0.5) + ", " + Math.min(255, (percentage * rgb.g) * 0.5) + ", " + Math.min(255, (percentage * rgb.b) * 0.5) + ", 255)";
@@ -617,7 +736,8 @@ function generateTiles() {
 	
 	//Clear board
 	tileDiv.innerHTML = "";
-	tiles = [[]];
+	tiles = [];
+	pastMoves = [];
 	//Populate game board with tiles. Iterate through tile width and height
 	for (let x = 0; x < tilesWide; x++){
 		boardColumns += " " + tileSize;
