@@ -563,7 +563,7 @@ function getUsedTileColor(moveNumber){
 	let percentage = moveNumber / max;
 	percentage = percentage / 2 + 0.5;
 	let rgb = hexToRGB(playerTileColor);
-	return "rgba(" + Math.min(255, (percentage * rgb.r) * 0.5) + ", " + Math.min(255, (percentage * rgb.g) * 0.5) + ", " + Math.min(255, (percentage * rgb.b) * 0.5) + ", 255)";
+	return "rgba(" + Math.min(255, (percentage * rgb.r) * 0.75) + ", " + Math.min(255, (percentage * rgb.g) * 0.75) + ", " + Math.min(255, (percentage * rgb.b) * 0.75) + ", 255)";
 }
 
 function hexToRGB(hex) {
