@@ -28,11 +28,34 @@ window.addEventListener("load", function(e){
     popup.style.backgroundColor = defaultBackgroundColor;
     showExitButton();
     closeAllPopups();
+
+    if (useLocalStorage){
+        switch (localStorage.lastPopup){
+            default:
+                lastPopup = instructionPopup;
+                break;
+            case "instruction":
+                lastPopup = instructionPopup;
+                break;
+            case "play":
+                lastPopup = playPopup;
+                break;
+            case "highscore":
+                lastPopup = highscorePopup;
+                break;
+            case "option":
+                lastPopup = optionsPopup;
+                break;
+        }
+    }
 });
 
 function showPopup(popupElem, popupName){
     lastPopup = popupElem;
     lastPopupName = popupName;
+    if (useLocalStorage){
+        localStorage.lastPopup = popupName;
+    }
     disableGameInput();
     setPopup(popupElem);
     popup.classList.remove("hidden");
@@ -66,26 +89,30 @@ window.addEventListener("popstate", function(e){
         closePopup();
     }else{
         disableGameInput();
-        setPopup(lastPopup);
+        if (lastPopup === undefined){
+            setPopup(instructionPopup);
+        }else{
+            setPopup(lastPopup);
+        }
         popup.classList.remove("hidden");
     }
 });
 
 function showPlayPopup(){
-    showPopup(playPopup, "Play");
+    showPopup(playPopup, "play");
 }
 
 function showInstructionPopup(){
-    showPopup(instructionPopup, "Instructions");
+    showPopup(instructionPopup, "instruction");
 }
 
 function showOptionsPopup(){
-    showPopup(optionsPopup, "Options");
+    showPopup(optionsPopup, "option");
     updateToggleSwitches();
 }
 
 function showHighScorePopup(){
-    showPopup(highscorePopup, "Highscores");
+    showPopup(highscorePopup, "highscore");
     updateHighScoreSpans();
 }
 
