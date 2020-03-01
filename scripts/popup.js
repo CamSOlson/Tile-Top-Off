@@ -12,6 +12,9 @@ var highscorePopup;
 var instructionPopup;
 var optionsPopup;
 
+var lastPopup;
+var lastPopupName;
+
 window.addEventListener("load", function(e){
     popup = document.querySelector("section#popup");
     popupContent = document.querySelector("section#popup-content");
@@ -28,10 +31,12 @@ window.addEventListener("load", function(e){
 });
 
 function showPopup(popupElem, popupName){
+    lastPopup = popupElem;
+    lastPopupName = popupName;
     disableGameInput();
     setPopup(popupElem);
     popup.classList.remove("hidden");
-    history.pushState({}, popupName, window.location.href);
+    history.pushState("popup", popupName, window.location.href);
 }
 
 function setPopup(popupElem){
@@ -57,8 +62,12 @@ function closePopupState(){
 }
 
 window.addEventListener("popstate", function(e){
-    if (!popup.classList.contains("hidden")){
+    if (history.state != "popup"){
         closePopup();
+    }else{
+        disableGameInput();
+        setPopup(lastPopup);
+        popup.classList.remove("hidden");
     }
 });
 
