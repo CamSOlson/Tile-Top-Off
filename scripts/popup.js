@@ -27,10 +27,11 @@ window.addEventListener("load", function(e){
     closeAllPopups();
 });
 
-function showPopup(popupElem){
+function showPopup(popupElem, popupName){
     disableGameInput();
     setPopup(popupElem);
     popup.classList.remove("hidden");
+    history.pushState({}, popupName, window.location.href);
 }
 
 function setPopup(popupElem){
@@ -50,21 +51,32 @@ function closePopup(){
     popup.classList.add("hidden");
 }
 
+function closePopupState(){
+    window.history.back();
+    closePopup();
+}
+
+window.addEventListener("popstate", function(e){
+    if (!popup.classList.contains("hidden")){
+        closePopup();
+    }
+});
+
 function showPlayPopup(){
-    showPopup(playPopup);
+    showPopup(playPopup, "Play");
 }
 
 function showInstructionPopup(){
-    showPopup(instructionPopup);
+    showPopup(instructionPopup, "Instructions");
 }
 
 function showOptionsPopup(){
-    showPopup(optionsPopup);
+    showPopup(optionsPopup, "Options");
     updateToggleSwitches();
 }
 
 function showHighScorePopup(){
-    showPopup(highscorePopup);
+    showPopup(highscorePopup, "Highscores");
     updateHighScoreSpans();
 }
 

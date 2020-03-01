@@ -31,13 +31,13 @@ main#game>label{
 	font-size: 0.75rem;
 }
 a.tile{
-	transition: 0.1s top, 0.1s left, 0.1s background-color 0.05s;
 	display: inline-block;
 	position: absolute;
 	width: 1rem;
 	height: 1rem;
 }
 a.tile[data-tiletype = "player"]{
+	transition: 0.1s top, 0.1s left, 0.1s background-color 0.05s, 0.1s background-image 0.05s;
 	z-index: 1;
 }
 section#board{
