@@ -37,10 +37,9 @@ self.addEventListener("fetch", function(event) {
 	}
 
 	event.respondWith(
-		fetch(event.request)
-			.catch(async () => {
-			  const cache = await caches.open(CACHE_NAME);
-				return cache.match('/index.html');
-			})
+		fetch(event.request).catch(async () => {
+			const cache = await caches.open(CACHE_NAME);
+			return cache.match('/index.html');
+		})
 	);
 });
