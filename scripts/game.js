@@ -10,6 +10,8 @@ var customPathComplexity = 0.5;
 
 var tiles = [[]];
 var pastMoves = [[]];
+var undoDirection = -1;
+var undos;
 var playerTile;
 var startPos;
 var path;
@@ -43,6 +45,7 @@ var holdIndicator;
 var startScreen;
 var difficultySpan;
 var scoreSpan;
+var undoSpan;
 
 var localStorage;
 
@@ -57,6 +60,7 @@ window.addEventListener("load", function(){
 	startScreen = document.querySelector("section#start-screen");
 	difficultySpan = document.querySelector("label#game-label>span#difficulty");
 	scoreSpan = document.querySelector("label#game-label>span#score");
+	undoSpan = document.querySelector("label#game-label>span#undo");
 
 	initLocalStorage();
 
@@ -156,7 +160,14 @@ function resetGame(){
 	transition = false;
 	starting = false;
 	pastMoves = [[]];
+	resetUndo();
 	hideStatus();
+}
+
+function resetUndo(){
+	undoDirection = -1;
+	undos = Math.round(tilesWide / 2) - 1;
+	undoSpan.innerHTML = undos;
 }
 
 function initLocalStorage(){
@@ -289,24 +300,27 @@ function getAdjacentTiles(x, y){
 	}else{
 		adjTiles.push(undefined);
 	}
-	//Below
+		//Right
+		if (x < tilesWide - 1){
+			adjTiles.push(tiles[x + 1][y]);
+		}else{
+			adjTiles.push(undefined);
+		}
+			//Below
 	if (y < tilesTall - 1){
 		adjTiles.push(tiles[x][y + 1]);
 	}else{
 		adjTiles.push(undefined);
 	}
-	//Left
-	if (x > 0){
-		adjTiles.push(tiles[x - 1][y]);
-	}else{
-		adjTiles.push(undefined);
-	}
-	//Right
-	if (x < tilesWide - 1){
-		adjTiles.push(tiles[x + 1][y]);
-	}else{
-		adjTiles.push(undefined);
-	}
+		//Left
+		if (x > 0){
+			adjTiles.push(tiles[x - 1][y]);
+		}else{
+			adjTiles.push(undefined);
+		}
+
+
+
 	return adjTiles;
 }
 
@@ -351,17 +365,39 @@ function update(key, shift){
 		}else if (!transition && !starting){
 			//Check movements
 			if (key == "38" || key == "87") {
-				move(0, shift);
-			}
-			else if (key == "40" || key == "83") {
-				move(1, shift);
-			}
-			else if (key == "37" || key == "65") {
-			   move(2, shift);
+				//UP
+				if (undos > 0 && undoDirection === 0){
+					undoLastMove();
+				}else{
+					move(0, shift);
+				}
 			}
 			else if (key == "39" || key == "68") {
-			   move(3, shift);
+				//RIGHT
+				if (undos > 0 && undoDirection === 1){
+					undoLastMove();
+				}else{
+					move(1, shift);
+				}
 			}
+			else if (key == "40" || key == "83") {
+				//DOWN
+				if (undos > 0 && undoDirection === 2){
+					undoLastMove();
+				}else{
+					move(2, shift);
+				}
+			}
+			else if (key == "37" || key == "65") {
+				//LEFT
+				if (undos > 0 && undoDirection === 3){
+					undoLastMove();
+				}else{
+					move(3, shift);
+				}
+			}
+
+			setUndoDirection();
 			
 			//Check if the player is at a dead end
 			if (atDeadEnd()){
@@ -387,6 +423,60 @@ function update(key, shift){
 			}
 		}
 	}
+	undoSpan.innerHTML = undos;
+}
+
+function setUndoDirection(){
+	undoDirection = -1;
+	let prevMove = pastMoves[pastMoves.length - 1];
+	if (prevMove !== undefined){
+		prevMove = prevMove[0].split(", ");
+		let prevPos = [Number(prevMove[0]), Number(prevMove[1])];
+		let playerPos = [Number(playerTile.dataset.x), Number(playerTile.dataset.y)];
+		if (prevPos[0] > playerPos[0]){
+			//Right
+			undoDirection = 1;
+		}else if (prevPos[0] < playerPos[0]){
+			//Left
+			undoDirection = 3;
+		}else if (prevPos[1] > playerPos[1]){
+			//Down
+			undoDirection = 2;
+		}else{
+			//Up
+			undoDirection = 0;
+		}
+	}
+	
+}
+
+function undoLastMove(){
+	let undoFullMove = false;
+	let undoID = -1;
+	undos--;
+	do {
+		if (undoID === -1 || undoID === pastMoves[pastMoves.length - 1][1]){
+			let lastMove = pastMoves.pop();
+
+			//Determine if full move
+			undoFullMove = lastMove[2];	
+			let lastMoveRaw = lastMove[0].split(", ");
+			let lastPos = [Number(lastMoveRaw[0]), Number(lastMoveRaw[1])];
+
+			let prevTile = tiles[lastPos[0]][lastPos[1]];
+			prevTile.dataset.tiletype = "empty";
+			prevTile.style.backgroundColor = defaultTileColor;
+			prevTile.style.backgroundImage = "none";
+
+			switchTiles(prevTile, playerTile);
+
+			tilesFilled--;
+
+			undoID = lastMove[1];
+		}else{
+			undoFullMove = false;
+		}
+	} while (undoFullMove);
 }
 
 function fadeToNewStage(){
@@ -585,14 +675,16 @@ function switchTiles(tile1, tile2){
 	tile1.dataset.y = tile2.dataset.y;
 	tile1.style.top = tile2.style.top;
 	tile1.style.left = tile2.style.left;
+	tiles[t1x][t1y] = tile2;
 
+	tiles[tile2.dataset.x][tile2.dataset.y] = tile1;
 	tile2.dataset.x = t1x;
 	tile2.dataset.y = t1y;
 	tile2.style.top = t1top;
 	tile2.style.left = t1left;
 	
-	tiles[tile1.dataset.x][tile1.dataset.y] = tile1;
-	tiles[tile2.dataset.x][tile2.dataset.y] = tile2;
+	// tiles[tile1.dataset.x][tile1.dataset.y] = tile1;
+	// tiles[tile2.dataset.x][tile2.dataset.y] = tile2;
 }
 
 function atDeadEnd(){
@@ -721,6 +813,7 @@ function generateTiles() {
 	tilesTall = tilesWide;
 	tilesFilled = 0;
 	tileSize = (100 / tilesWide);
+	resetUndo();
 	
 	let prevColor = playerTileColor;
 	while (playerTileColor == prevColor){
