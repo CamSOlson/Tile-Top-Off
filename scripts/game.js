@@ -750,8 +750,8 @@ function generateTiles() {
 			tileDiv.appendChild(tile);	
 			tile.style.left = (tileSize * x) + "%";
 			tile.style.top = (tileSize * y) + "%";
-			tile.style.width = tileSize + "%";
-			tile.style.height = tileSize + "%";
+			tile.style.width = (Number(tileSize) + 0.01) + "%";
+			tile.style.height = (Number(tileSize) + 0.01) + "%";
 
 			col.push(tile);
 		}
