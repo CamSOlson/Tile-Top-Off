@@ -2,7 +2,7 @@ body{
 	background-color: Black;
 	padding: 0;
 	margin: 0;
-	font-family: sans-serif;
+	font-family: spartan;
 	overflow: hidden;
 	position: fixed;
 	outline: none;
@@ -327,3 +327,8 @@ div#hold-indicator.active{
 	top: -3.5rem;
 	left: -3.5rem;
 }
+
+@font-face {
+	font-family: spartan;
+	src: url("/media/fonts/Spartan/Spartan-VariableFont_wght.ttf");
+  }
