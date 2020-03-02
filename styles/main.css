@@ -35,7 +35,6 @@ div#game-labels{
 	align-self: flex-start;
 	display: grid;
 	grid-template-columns: 10rem auto;
-	/* grid-template-rows: 2; */
 }
 div#game-labels>label{
 	transition: 0.25s opacity;

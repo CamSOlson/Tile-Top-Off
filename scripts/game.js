@@ -29,6 +29,7 @@ var score = 0;
 var highScoreEasy = 0;
 var highScoreNorm = 0;
 var highScoreHard = 0;
+var highScoreCustom = 0;
 
 var gameOver = false;
 var transition = false;
@@ -265,26 +266,33 @@ function setCustomPathComplexity(complexity){
 function updateScore(currentScore, currentDifficulty){
 	scoreSpan.innerHTML = currentScore;
 	switch (currentDifficulty){
+		case -1:
+			//Custom
+			if (useLocalStorage && score > Number(localStorage.highScoreCustom)){
+				localStorage.highScoreCustom = currentScore;
+				highScoreCustom = currentScore;
+			}
+			break;
 		case 0:
 			//Easy
 			if (useLocalStorage && score > Number(localStorage.highScoreEasy)){
 				localStorage.highScoreEasy = currentScore;
+				highScoreEasy = currentScore;
 			}
-			highScoreEasy = currentScore;
 			break;
 		case 1:
 			//Normal
 			if (useLocalStorage && score > Number(localStorage.highScoreNorm)){
 				localStorage.highScoreNorm = currentScore;
+				highScoreNorm = currentScore;
 			}
-			highScoreNorm = currentScore;
 			break;
 		case 2:
 			//Hard
 			if (useLocalStorage && score > Number(localStorage.highScoreHard)){
 				localStorage.highScoreHard = currentScore;
+				highScoreHard = currentScore;
 			}
-			highScoreHard = currentScore;
 			break;
 	}
 }

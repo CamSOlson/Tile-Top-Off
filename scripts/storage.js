@@ -7,6 +7,10 @@ function initLocalStorage(){
 		useLocalStorage = true;
 
 		//High scores
+		if (localStorage.highScoreCustom === undefined){
+			localStorage.highScoreCustom = 0;
+		}
+		highScoreCustom = Number(localStorage.highScoreCustom);
 		if (localStorage.highScoreEasy === undefined){
 			localStorage.highScoreEasy = 0;
 		}
@@ -18,7 +22,6 @@ function initLocalStorage(){
 		if (localStorage.highScoreHard === undefined){
 			localStorage.highScoreHard = 0;
 		}
-		highScoreHard = Number(localStorage.highScoreHard);
 
 		//Board size
 		if (localStorage.customBoardSize === undefined){

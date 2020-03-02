@@ -90,7 +90,7 @@ div.toggle-container, div.slider-container{
 	padding: 0;
 }
 div.slider-container>label{
-	width: 10rem;
+	width: 15rem;
 	text-align: right;
 	line-height: 2rem;
 	margin-right: 2rem;
@@ -149,7 +149,7 @@ figure.instruction-diagram div.progression{
 		flex-wrap: wrap;
 	}
 	div.slider-container>label{
-		width: 10rem;
+		width: 15rem;
 		text-align: center;
 		line-height: 2rem;
 		margin-right: 0;
