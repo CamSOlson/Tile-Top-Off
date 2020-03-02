@@ -55,6 +55,8 @@ var resetAvailable = true;
 var resetRefresh = 0;
 var resetRefreshWait = 5;
 
+var inputLocked = false;
+
 window.addEventListener("load", function(){
 	mainGame = document.querySelector("main#game");
 	gameBoard = document.querySelector("section#board");
@@ -75,8 +77,13 @@ window.addEventListener("load", function(){
 	initLocalStorage();
 
 	window.addEventListener("keydown", function(e){
-		e = e || window.event;
-		update(e.keyCode);
+		if (!inputLocked){
+			e = e || window.event;
+			update(e.keyCode);	
+		}
+	});
+	window.addEventListener("keyup", function(e){
+		inputLocked = false;
 	});
 	
 	gameBoard.addEventListener("click", function(e){
@@ -432,6 +439,7 @@ function update(key, shift){
 					if ("vibrate" in window.navigator && vibration){
 						window.navigator.vibrate(250);
 					}
+					inputLocked = true;
 				}else{
 					gameOver = true;
 					showStatus("GAME OVER", "#FF0000", "Stages complete: " + score + "<br><br>Move to continue...", "#FFC8C8", "rgba(0.5, 0.5, 0.5, 0.5)");
@@ -440,6 +448,7 @@ function update(key, shift){
 					if ("vibrate" in window.navigator && vibration){
 						window.navigator.vibrate(500);
 					}
+					inputLocked = true;
 				}
 			}
 		}
