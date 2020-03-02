@@ -501,10 +501,9 @@ function setUndoDirection(){
 function undoLastMove(){
 	let undoFullMove = false;
 	let undoID = -1;
+	let undoPerformed = false;
 	do {
 		if (undoID === -1 || undoID === pastMoves[pastMoves.length - 1][1]){
-			undos--;
-
 			let lastMove = pastMoves.pop();
 
 			//Determine if full move
@@ -522,10 +521,16 @@ function undoLastMove(){
 			tilesFilled--;
 
 			undoID = lastMove[1];
+			undoPerformed = true;
 		}else{
 			undoFullMove = false;
 		}
 	} while (undoFullMove);
+
+	if (undoPerformed){
+		undos--;
+	}
+
 	updateGameActionButtons();
 }
 
