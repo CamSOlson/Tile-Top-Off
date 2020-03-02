@@ -10,8 +10,6 @@ var customPathComplexity = 0.5;
 
 var tiles = [[]];
 var pastMoves = [[]];
-var undoDirection = -1;
-var undos;
 var playerTile;
 var startPos;
 var path;
@@ -45,6 +43,14 @@ var startScreen;
 var difficultySpan;
 var scoreSpan;
 var undoSpan;
+var undoButton;
+var restartButton;
+
+var undoDirection = -1;
+var undos;
+var restartAvailable = true;
+var restartRefresh = 0;
+var restartRefreshWait = 5;
 
 window.addEventListener("load", function(){
 	mainGame = document.querySelector("main#game");
@@ -57,7 +63,9 @@ window.addEventListener("load", function(){
 	startScreen = document.querySelector("section#start-screen");
 	difficultySpan = document.querySelector("label#game-label>span#difficulty");
 	scoreSpan = document.querySelector("label#game-label>span#score");
-	undoSpan = document.querySelector("label#game-label>span#undo");
+	undoSpan = document.querySelector("span#undo-count");
+	undoButton = document.querySelector("button#undo-button");
+	restartButton = document.querySelector("button#restart-button");
 
 	initLocalStorage();
 
@@ -92,6 +100,35 @@ window.addEventListener("load", function(){
 			}
         }
 	});
+
+	undoButton.addEventListener("click", function(e){
+		let key = "0";
+		switch (undoDirection){
+			case 0:
+				update(38, false);
+				break;
+			case 1:
+				update(39, false);
+				break;
+			case 2:
+				update(40, false);
+				break;
+			case 3:
+				update(37, false);
+				break;
+
+		}
+	});
+
+	restartButton.addEventListener("click", function(e){
+		if (restartAvailable){
+			restartAvailable = false;
+			restartRefresh = restartRefreshWait;
+			restartRefreshWait++;
+			resetGame();
+			updateGameActionButtons();
+		}
+	});
 	
 	showStartScreen();
 });
@@ -111,6 +148,9 @@ function beginGame(){
 	gameOver = false;
 	score = 0;
 	scoreSpan.innerHTML = 0;
+	restartAvailable = true;
+	restartRefresh = 0;
+	restartRefreshWait = 5;
 	switch (difficulty){
 		default:
 			difficultySpan.innerHTML = "Custom";
@@ -128,6 +168,7 @@ function beginGame(){
 	loadGame();
 	hideStatus();
 	closePopup();
+	updateGameActionButtons();
 	hideStartScreen();
 }
 
@@ -143,6 +184,7 @@ function resetGame(){
 			if (tiles[x][y].dataset.tiletype === "used" || tiles[x][y].dataset.tiletype === "player"){
 				tiles[x][y].dataset.tiletype = "empty";
 				tiles[x][y].style.backgroundColor = defaultTileColor;
+				tiles[x][y].style.backgroundImage = "none";
 			}
 		}
 	}
@@ -156,14 +198,14 @@ function resetGame(){
 	gameOver = false;
 	transition = false;
 	starting = false;
-	pastMoves = [[]];
+	pastMoves = [];
 	resetUndo();
 	hideStatus();
 }
 
 function resetUndo(){
 	undoDirection = -1;
-	undos = Math.round(tilesWide / 2) - 1;
+	undos = Math.round(tilesWide / 2);
 	undoSpan.innerHTML = undos;
 }
 
@@ -363,6 +405,7 @@ function update(key, shift){
 					updateScore(score, difficulty);
 					fadeToNewStage();
 					generateTiles();
+					updateRestartRefresh();
 					transition = false;
 					if ("vibrate" in window.navigator && vibration){
 						window.navigator.vibrate(250);
@@ -380,6 +423,29 @@ function update(key, shift){
 		}
 	}
 	undoSpan.innerHTML = undos;
+}
+
+function updateGameActionButtons(){
+	if (undos <= 0){
+		undoButton.classList.add("disabled");
+	}else if (undoButton.classList.contains("disabled")){
+		undoButton.classList.remove("disabled");
+	}
+
+	if (!restartAvailable){
+		restartButton.classList.add("disabled");
+	}else if (restartButton.classList.contains("disabled")){
+		restartButton.classList.remove("disabled");
+	}
+}
+
+function updateRestartRefresh(){
+	restartRefresh--;
+	if (restartRefresh <= 0){
+		restartAvailable = true;
+		restartRefresh = 0;
+	}
+	updateGameActionButtons();
 }
 
 function setUndoDirection(){
@@ -409,9 +475,10 @@ function setUndoDirection(){
 function undoLastMove(){
 	let undoFullMove = false;
 	let undoID = -1;
-	undos--;
 	do {
 		if (undoID === -1 || undoID === pastMoves[pastMoves.length - 1][1]){
+			undos--;
+
 			let lastMove = pastMoves.pop();
 
 			//Determine if full move
@@ -433,6 +500,7 @@ function undoLastMove(){
 			undoFullMove = false;
 		}
 	} while (undoFullMove);
+	updateGameActionButtons();
 }
 
 function fadeToNewStage(){
@@ -770,6 +838,7 @@ function generateTiles() {
 	tilesFilled = 0;
 	tileSize = (100 / tilesWide);
 	resetUndo();
+	updateGameActionButtons();
 	
 	let prevColor = playerTileColor;
 	while (playerTileColor == prevColor){

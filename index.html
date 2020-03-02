@@ -41,23 +41,25 @@
 	</head>
 	<body>
 		<main id="game">
-			<label type="text" id="game-label">
-				Difficulty: <span id="difficulty">Easy</span>
-				&nbsp &nbsp
-				Score: <span id="score">0</span>
-				&nbsp &nbsp
-				Undos: <span id="undo">0</span>
-			</label>
-			<section id="board">
-				<div class="tiles" id="tiles"></div>
-				<div id="status" class="status-shown" style="background-color:Black">
-					<p id="statusMain" class="status-shown"></p>
-					<p id="statusSub" class="status-shown"></p>
+			<div>
+				<label type="text" id="game-label">
+					Difficulty: <span id="difficulty">Easy</span>
+					&nbsp &nbsp
+					Score: <span id="score">0</span>
+					&nbsp &nbsp
+					<!-- Undos: <span id="undo-count">0</span> -->
+				</label>
+				<section id="board">
+					<div class="tiles" id="tiles"></div>
+					<div id="status" class="status-shown" style="background-color:Black">
+						<p id="statusMain" class="status-shown"></p>
+						<p id="statusSub" class="status-shown"></p>
+					</div>
+				</section>
+				<div id="game-actions">
+					<button id="undo-button">&#x21B6</button><label> x<span id="undo-count">0</span> </label>
+					<button id="restart-button">&#x21BA</button>
 				</div>
-			</section>
-			<div id="game-actions">
-				<button id="undo">&#x21B6</button>
-				<button id="restart">&#x21BA</button>
 			</div>
 			<div id="hold-indicator"></div>
 		</main>
