@@ -31,11 +31,21 @@ main#game>div{
 	justify-content: center;
 	align-items: center;
 }
-main#game>div>label{
+div#game-labels{
+	align-self: flex-start;
+	display: grid;
+	grid-template-columns: 10rem auto;
+	/* grid-template-rows: 2; */
+}
+div#game-labels>label{
+	transition: 0.25s opacity;
 	color: White;
 	position: relative;
 	font-size: 1rem;
-	align-self: flex-start;
+	opacity: 1;
+}
+div#game-labels>label#reset-refresh.hidden{
+	opacity: 0;
 }
 a.tile{
 	display: inline-block;
@@ -125,6 +135,10 @@ div#game-actions{
 	margin: 0;
 	align-self: flex-end;
 	color: White;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
 }
 div#game-actions>button{
 	transition: 0.25s opacity;
@@ -134,6 +148,10 @@ div#game-actions>button{
 	margin: 0.25rem 0 0 0;
 	padding: 0;
 	opacity: 1;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 }
 div#game-actions>button.disabled{
 	opacity: 0.5;

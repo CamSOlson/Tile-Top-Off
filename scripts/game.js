@@ -42,15 +42,17 @@ var holdIndicator;
 var startScreen;
 var difficultySpan;
 var scoreSpan;
-var undoSpan;
+var undoCountSpan;
 var undoButton;
-var restartButton;
+var resetRefreshLabel;
+var resetRefreshCount;
+var resetButton;
 
 var undoDirection = -1;
 var undos;
-var restartAvailable = true;
-var restartRefresh = 0;
-var restartRefreshWait = 5;
+var resetAvailable = true;
+var resetRefresh = 0;
+var resetRefreshWait = 5;
 
 window.addEventListener("load", function(){
 	mainGame = document.querySelector("main#game");
@@ -61,11 +63,13 @@ window.addEventListener("load", function(){
 	tileDiv = document.querySelector("div#tiles");
 	holdIndicator = document.querySelector("div#hold-indicator");
 	startScreen = document.querySelector("section#start-screen");
-	difficultySpan = document.querySelector("label#game-label>span#difficulty");
-	scoreSpan = document.querySelector("label#game-label>span#score");
-	undoSpan = document.querySelector("span#undo-count");
+	difficultySpan = document.querySelector("div#game-labels span#difficulty");
+	scoreSpan = document.querySelector("div#game-labels span#score");
+	undoCountSpan = document.querySelector("span#undo-count");
+	resetRefreshLabel = document.querySelector("label#reset-refresh");
+	resetRefreshCount = document.querySelector("span#reset-refresh-count");
 	undoButton = document.querySelector("button#undo-button");
-	restartButton = document.querySelector("button#restart-button");
+	resetButton = document.querySelector("button#reset-button");
 
 	initLocalStorage();
 
@@ -120,12 +124,14 @@ window.addEventListener("load", function(){
 		}
 	});
 
-	restartButton.addEventListener("click", function(e){
-		if (restartAvailable){
-			restartAvailable = false;
-			restartRefresh = restartRefreshWait;
-			restartRefreshWait++;
+	resetButton.addEventListener("click", function(e){
+		if (resetAvailable){
+			resetAvailable = false;
+			resetRefresh = resetRefreshWait;
+			resetRefreshWait++;
 			resetGame();
+			resetRefreshCount.innerHTML = resetRefresh;
+			resetRefreshLabel.classList.remove("hidden");
 			updateGameActionButtons();
 		}
 	});
@@ -148,9 +154,11 @@ function beginGame(){
 	gameOver = false;
 	score = 0;
 	scoreSpan.innerHTML = 0;
-	restartAvailable = true;
-	restartRefresh = 0;
-	restartRefreshWait = 5;
+	resetAvailable = true;
+	resetRefresh = 0;
+	resetRefreshWait = 5;
+	resetRefreshCount.innerHTML = resetRefresh;
+	resetRefreshLabel.classList.add("hidden");
 	switch (difficulty){
 		default:
 			difficultySpan.innerHTML = "Custom";
@@ -206,7 +214,7 @@ function resetGame(){
 function resetUndo(){
 	undoDirection = -1;
 	undos = Math.round(tilesWide / 2);
-	undoSpan.innerHTML = undos;
+	undoCountSpan.innerHTML = undos;
 }
 
 function setDifficulty(dif){
@@ -355,6 +363,12 @@ function update(key, shift){
 		}
 	}
 	if (!blockInput){
+		resetRefreshCount.innerHTML = resetRefresh;
+		if (resetRefresh <= 0){
+			resetRefreshLabel.classList.add("hidden");
+		}else if (resetRefreshLabel.classList.contains("hidden")){
+			resetRefreshLabel.classList.remove("hidden");
+		}
 		if (gameOver && !transition){
 			if (key == "38" || key == "40" || key == "37" || key == "39" || key == "87" || key == "83" || key == "65" || key == "68") {
 				showStartScreen();
@@ -405,7 +419,7 @@ function update(key, shift){
 					updateScore(score, difficulty);
 					fadeToNewStage();
 					generateTiles();
-					updateRestartRefresh();
+					updateResetRefresh();
 					transition = false;
 					if ("vibrate" in window.navigator && vibration){
 						window.navigator.vibrate(250);
@@ -422,7 +436,7 @@ function update(key, shift){
 			}
 		}
 	}
-	undoSpan.innerHTML = undos;
+	undoCountSpan.innerHTML = undos;
 }
 
 function updateGameActionButtons(){
@@ -432,18 +446,22 @@ function updateGameActionButtons(){
 		undoButton.classList.remove("disabled");
 	}
 
-	if (!restartAvailable){
-		restartButton.classList.add("disabled");
-	}else if (restartButton.classList.contains("disabled")){
-		restartButton.classList.remove("disabled");
+	if (!resetAvailable){
+		resetButton.classList.add("disabled");
+	}else if (resetButton.classList.contains("disabled")){
+		resetButton.classList.remove("disabled");
 	}
 }
 
-function updateRestartRefresh(){
-	restartRefresh--;
-	if (restartRefresh <= 0){
-		restartAvailable = true;
-		restartRefresh = 0;
+function updateResetRefresh(){
+	resetRefresh--;
+	resetRefreshCount.innerHTML = resetRefresh;
+	if (resetRefresh <= 0){
+		resetAvailable = true;
+		resetRefresh = 0;
+		resetRefreshLabel.classList.add("hidden");
+	}else if (resetRefreshLabel.classList.contains("hidden")){
+		resetRefreshLabel.classList.remove("hidden");
 	}
 	updateGameActionButtons();
 }
@@ -908,7 +926,7 @@ function generateTiles() {
 	let tilesGenerated = 0;
 	let pathSequence = [[x, y]];
 	let invalidMoves = {};
-	let restart = false;
+	let reset = false;
 	let timeElapsed = 0;
 	while (tilesGenerated < Math.round((tilesWide * tilesTall) * Math.min(1, pathComplexity))) {
 		let startTime = new Date();
@@ -970,10 +988,10 @@ function generateTiles() {
 		timeElapsed += new Date() - startTime;
 
 		if (timeElapsed > 10000){
-			restart = confirm("The current level is taking a while to generate, would you like to start again?");
+			reset = confirm("The current level is taking a while to generate, would you like to start again?");
 		}
 
-		if (restart){
+		if (reset){
 			generateTiles();
 			return;
 		}
