@@ -14,7 +14,7 @@ var playerTile;
 var startPos;
 var path;
 
-var defaultTileColor = "#00000000";
+var defaultTileColor = "#333333";
 var obstacleTileColor = "#888888";
 var playerColors = ["#ff2626", "#ff9326", "#ffff00", "#00ff40", "#0080ff", "#9326ff", "#ff73ff"];
 var playerTileColor = playerColors[0];
