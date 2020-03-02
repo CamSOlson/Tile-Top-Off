@@ -22,6 +22,7 @@ function initLocalStorage(){
 		if (localStorage.highScoreHard === undefined){
 			localStorage.highScoreHard = 0;
 		}
+		highScoreHard = Number(localStorage.highScoreHard);
 
 		//Board size
 		if (localStorage.customBoardSize === undefined){
