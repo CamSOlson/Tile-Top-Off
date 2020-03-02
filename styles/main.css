@@ -168,6 +168,12 @@ div#game-actions>button.disabled{
 	main#game>div>label{
 		font-size: 0.75rem;
 	}
+	div#game-labels{
+		grid-template-columns: 8rem auto;
+	}
+	div#game-labels>label{
+		font-size: 0.75rem;
+	}
 }
 
 /*Start screen*/

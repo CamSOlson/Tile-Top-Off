@@ -80,7 +80,7 @@ span.control{
 	font-style: italic;
 }
 
-div.toggle-container, div.slider-container{
+div.slider-container{
 	width: 100%;
 	display: flex;
 	flex-direction: row;
@@ -88,6 +88,22 @@ div.toggle-container, div.slider-container{
 	align-items: center;
 	margin: 0;
 	padding: 0;
+}
+div.toggle-grid{
+	display: grid;
+	align-items: center;
+	grid-template-columns: 5rem auto;
+	grid-template-rows: repeat(10, 3rem);
+}
+div.toggle-grid>label:nth-child(odd){
+	grid-column-start: 1;
+}
+div.toggle-grid>label:nth-child(even){
+	grid-column-start: 2;
+}
+div.toggle-grid>label:not(.toggle-switch){
+	margin-left: 1rem;
+	text-align: left;
 }
 div.slider-container>label{
 	width: 15rem;
@@ -145,7 +161,7 @@ figure.instruction-diagram div.progression{
 		border-bottom: 1rem solid transparent;
 		margin: 0.5rem;
 	}
-	div.toggle-container, div.slider-container{
+	div.slider-container{
 		flex-wrap: wrap;
 	}
 	div.slider-container>label{
