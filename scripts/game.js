@@ -566,6 +566,7 @@ function disableGameInput(){
 
 function move(direction, allTheWay){
 	let moveID = pastMoves.length;
+	let moved = false;
 	do {
 		let adjacentTiles = getAdjacentTiles(playerTile.dataset.x, playerTile.dataset.y);
 		if (adjacentTiles[direction] !== undefined){
@@ -575,10 +576,14 @@ function move(direction, allTheWay){
 			if (playerMoved){
 				pastMoves.push([adjacentTiles[direction].dataset.x + ", " + adjacentTiles[direction].dataset.y, moveID, fullMove]);
 			}
+			moved = true;
 		}else{
 			allTheWay = false;
 		}
 	} while (allTheWay);
+	if (moved){
+		playSound(moveTileSound);
+	}
 }
 
 function movePlayer(playerTile, targetTile){

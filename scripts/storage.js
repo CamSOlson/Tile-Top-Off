@@ -41,6 +41,12 @@ function initLocalStorage(){
 			localStorage.vibration = true;
 		}
 		vibration = localStorage.vibration == "true";
+		
+		//SFX
+		if (localStorage.sfx === undefined){
+			localStorage.sfx = true;
+		}
+		sfxEnabled = localStorage.sfx == "true";
 	}catch(e){
 		console.log(e);
 	}
