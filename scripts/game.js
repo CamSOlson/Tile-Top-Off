@@ -575,14 +575,17 @@ function move(direction, allTheWay){
 			allTheWay = playerMoved && allTheWay;
 			if (playerMoved){
 				pastMoves.push([adjacentTiles[direction].dataset.x + ", " + adjacentTiles[direction].dataset.y, moveID, fullMove]);
+				moved = true;
 			}
-			moved = true;
 		}else{
 			allTheWay = false;
 		}
 	} while (allTheWay);
+	
 	if (moved){
 		playSound(moveTileSound);
+	}else{
+		playSound(blockedTileSound);
 	}
 }
 

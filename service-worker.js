@@ -8,7 +8,7 @@ const FILES_TO_CACHE = [
 		"/media/images/example-board.png", "/media/images/full-move-diagram.png", "/media/images/move-diagram.png",
 		"/media/images/icons/icon-64x64.png", "/media/images/icons/icon-192x192.png", "/media/images/icons/icon-512x512.png",
 	"/media/fonts/Spartan/Spartan-VariableFont_wght.ttf", "/media/fonts/Spartan/OFL.txt",
-	"/media/audio/sfx/move/default-normal-move.wav"
+	"/media/audio/sfx/move/default-normal-move.wav", "/media/audio/sfx/move/default-blocked.wav"
 ];
 
 self.addEventListener("install", function(event) {
