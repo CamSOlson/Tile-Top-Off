@@ -59,7 +59,13 @@ function showPopup(popupElem, popupName){
     disableGameInput();
     setPopup(popupElem);
     popup.classList.remove("hidden");
-    history.pushState("popup", popupName, window.location.href);
+    if (history.state !== "popup"){
+        if (history.state === null){
+            history.pushState("popup", popupName, window.location.href);
+        }else{
+            history.replaceState("popup", popupName, window.location.href);
+        }
+    }
 }
 
 function setPopup(popupElem){
@@ -77,26 +83,28 @@ function closeAllPopups(){
 function closePopup(){
     enableGameInput();
     popup.classList.add("hidden");
-}
 
-function closePopupState(){
-    window.history.back();
-    closePopup();
-}
-
-window.addEventListener("popstate", function(e){
-    if (history.state != "popup"){
-        closePopup();
-    }else{
-        disableGameInput();
-        if (lastPopup === undefined){
-            setPopup(instructionPopup);
-        }else{
-            setPopup(lastPopup);
-        }
-        popup.classList.remove("hidden");
+    if (history.state === "popup"){
+        history.back();
     }
-});
+}
+
+// window.addEventListener("popstate", function(e){
+//     if (history.state == "popup"){
+//         disableGameInput();
+//         if (lastPopup === undefined){
+//             setPopup(instructionPopup);
+//         }else{
+//             setPopup(lastPopup);
+//         }
+//         popup.classList.remove("hidden");
+
+//     }else{
+//         console.log("Closing popup");
+//         closePopup();
+
+//     }
+// });
 
 function showPlayPopup(){
     showPopup(playPopup, "play");

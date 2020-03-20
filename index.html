@@ -24,6 +24,7 @@
 		<script src="/scripts/storage.js"></script>
 		<script src="/scripts/popup.js"></script>
 		<script src="/scripts/menu.js"></script>
+		<script src="/scripts/history.js"></script>
 		<script src="/scripts/game.js"></script> 
 		<script src="/scripts/install.js"></script>
 		<script src="/scripts/audio.js"></script>
@@ -81,14 +82,14 @@
 		</section>
 
 		<section id="popup" class="hidden">
-			<a id="exit-popup" onclick="closePopupState();"><div class="exit-arrow"></div></a>
+			<a id="exit-popup" onclick="closePopup();"><div class="exit-arrow"></div></a>
 			<section id="popup-content">
 				<section id="play-content" style="display: none;">
 					<h2>Quick Play</h2>
 					<section id="quick-play-difficulties" class="start-drop-down-section">
-						<button id="start-quick-play-easy" onclick="closePopupState(); setDifficulty(0); beginGame(); closeMenu();">Easy</button>
-						<button id="start-quick-play-norm" onclick="closePopupState(); setDifficulty(1); beginGame(); closeMenu();">Normal</button>
-						<button id="start-quick-play-hard" onclick="closePopupState(); setDifficulty(2); beginGame(); closeMenu();">Hard</button>	
+						<button id="start-quick-play-easy" onclick="closePopup(); setDifficulty(0); beginGame(); closeMenu();">Easy</button>
+						<button id="start-quick-play-norm" onclick="closePopup(); setDifficulty(1); beginGame(); closeMenu();">Normal</button>
+						<button id="start-quick-play-hard" onclick="closePopup(); setDifficulty(2); beginGame(); closeMenu();">Hard</button>	
 					</section>
 					<h2>Custom Game</h2>
 					<section id="custom-game-settings" class="start-drop-down-section">
@@ -101,7 +102,7 @@
 							<input type="range" min="0.05" max="0.70" value="0.5" step="0.01" class="slider" id="path-complexity-slider" oninput="onObstacleSliderInput()">
 						</div>
 					</section>
-					<button id="start-custom-game" onclick="closePopupState(); setDifficulty(-1); applyCustomOptions(); beginGame(); closeMenu();">Start Custom Game</button>
+					<button id="start-custom-game" onclick="closePopup(); setDifficulty(-1); applyCustomOptions(); beginGame(); closeMenu();">Start Custom Game</button>
 				</section>
 
 				<section id="highscore-content" style="display: none;">

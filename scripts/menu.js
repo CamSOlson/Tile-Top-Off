@@ -5,13 +5,23 @@ window.addEventListener("load", function(){
 });
 
 function toggleMenu(){
-    menu.classList.toggle("open");
+    if (menu.classList.contains("open")){
+        closeMenu();
+    }else{
+        showMenu();
+    }
 }
 
 function closeMenu(){
     menu.classList.remove("open");
+    if (history.state === "menu"){
+        history.back();
+    }
 }
 
 function showMenu(){
     menu.classList.add("open");
+    if (history.state !== "menu"){
+        history.pushState("menu", "menu", window.location.href);
+    }
 }
