@@ -150,6 +150,18 @@ window.addEventListener("load", function(){
 function showStartScreen(){
 	starting = true;
 	startScreen.classList.remove("hidden");
+
+	// window.removeEventListener("popstate", historyPopStateListener);
+	closeNextPopupState = true;
+	closeMenu();
+
+	// window.addEventListener("popstate", tempPopStateListener);
+	// function tempPopStateListener(e){
+	// 	window.removeEventListener("popstate", tempPopStateListener);
+	// 	window.addEventListener("popstate", historyPopStateListener);
+	// }
+
+
 }
 
 function hideStartScreen(){
@@ -183,7 +195,6 @@ function beginGame(){
 	}
 	loadGame();
 	hideStatus();
-	closePopup();
 	updateGameActionButtons();
 	hideStartScreen();
 }
@@ -442,13 +453,14 @@ function update(key, shift){
 					inputLocked = true;
 				}else{
 					gameOver = true;
-					showStatus("GAME OVER", "#FF0000", "Stages complete: " + score + "<br><br>Move to continue...", "#FFC8C8", "rgba(0.5, 0.5, 0.5, 0.5)");
+					//showStatus("GAME OVER", "#FF0000", "Stages complete: " + score + "<br><br>Move to continue...", "#FFC8C8", "rgba(0.5, 0.5, 0.5, 0.5)");
 					updateScore(score, difficulty);
+					showGameOverPopup();
 					score = 0;
 					if ("vibrate" in window.navigator && vibration){
 						window.navigator.vibrate(500);
 					}
-					inputLocked = true;
+					//inputLocked = true;
 				}
 			}
 		}

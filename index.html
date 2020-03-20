@@ -31,6 +31,7 @@
 		<script src="/scripts/menus/start.js"></script>
 		<script src="/scripts/menus/highscores.js"></script>
 		<script src="/scripts/menus/options.js"></script>
+		<script src="/scripts/menus/gameover.js"></script>
 
 		<script>
 			if ("serviceWorker" in navigator) {
@@ -179,6 +180,16 @@
 				
 				
 				</section>
+
+				<section id="game-over-content" style="display: none;">
+					<h1>Game Over</h1> 
+
+					<p>Difficulty: <span id="game-over-difficulty"></span></p>
+					<p>Score: <span id="game-over-score"></span></p>
+
+					<button onclick="showStartScreen();">Main Menu</button>				
+				</section>
+
 			</section>
 		</section>
 
@@ -188,7 +199,7 @@
 			</div>
 
 			<nav>
-				<a id="exit-to-start-button" onclick="showStartScreen(); closeMenu();">Main Menu</a>
+				<a id="exit-to-start-button" onclick="showStartScreen();">Main Menu</a>
 				<a id="instruction-button" onclick="showInstructionPopup(); closeMenu();">How to Play</a>
 				<a id="high-score-button" onclick="showHighScorePopup(); closeMenu();">High Scores</a>
 				<a id="option-button" onclick="showOptionsPopup(); closeMenu();">Options</a>

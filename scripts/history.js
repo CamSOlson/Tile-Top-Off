@@ -1,22 +1,35 @@
-window.addEventListener("popstate", function(e){
+var closeNextPopupState = false;
+
+window.addEventListener("popstate", historyPopStateListener);
+
+function historyPopStateListener(e){
 	switch (history.state){
 		default:
 			closePopup();
 			closeMenu();
+			if (gameOver){
+				showStartScreen();
+			}
+			closeNextPopupState = false;
 			break;
 		case "popup":
 			closeMenu();
-			disableGameInput();
-			if (lastPopup === undefined){
-				setPopup(instructionPopup);
+			if (closeNextPopupState){
+				closePopup();
 			}else{
-				setPopup(lastPopup);
+				disableGameInput();
+				if (lastPopup === undefined){
+					setPopup(instructionPopup);
+				}else{
+					setPopup(lastPopup);
+				}
+				showPopup(lastPopup, lastPopupName);	
 			}
-			showPopup(lastPopup, lastPopupName);
+			closeNextPopupState = false;
+
 			break;
 		case "menu":
-			closePopup();
 			showMenu();
 			break;
 	}
-});
+}

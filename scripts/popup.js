@@ -11,6 +11,7 @@ var playPopup;
 var highscorePopup;
 var instructionPopup;
 var optionsPopup;
+var gameOverPopup;
 
 var lastPopup;
 var lastPopupName;
@@ -24,6 +25,7 @@ window.addEventListener("load", function(e){
     instructionPopup = document.querySelector("section#popup-content>section#instruction-content");
     optionsPopup = document.querySelector("section#popup-content>section#options-content");
     playPopup = document.querySelector("section#popup-content>section#play-content");
+    gameOverPopup = document.querySelector("section#popup-content>section#game-over-content");
 
     popup.style.backgroundColor = defaultBackgroundColor;
     showExitButton();
@@ -46,6 +48,9 @@ window.addEventListener("load", function(e){
             case "option":
                 lastPopup = optionsPopup;
                 break;
+             case "gameover":
+                lastPopup = gameOverPopup;
+                break;
         }
     }
 });
@@ -60,12 +65,12 @@ function showPopup(popupElem, popupName){
     setPopup(popupElem);
     popup.classList.remove("hidden");
     if (history.state !== "popup"){
-        if (history.state === null){
-            history.pushState("popup", popupName, window.location.href);
-        }else{
-            history.replaceState("popup", popupName, window.location.href);
+        if (history.state === "menu"){
+            history.back();
         }
+        history.pushState("popup", popupName, window.location.href);
     }
+    showExitButton();
 }
 
 function setPopup(popupElem){
@@ -78,6 +83,7 @@ function closeAllPopups(){
     highscorePopup.style.display = "none";
     instructionPopup.style.display = "none";
     optionsPopup.style.display = "none";
+    gameOverPopup.style.display = "none";
 }
 
 function closePopup(){
@@ -88,23 +94,6 @@ function closePopup(){
         history.back();
     }
 }
-
-// window.addEventListener("popstate", function(e){
-//     if (history.state == "popup"){
-//         disableGameInput();
-//         if (lastPopup === undefined){
-//             setPopup(instructionPopup);
-//         }else{
-//             setPopup(lastPopup);
-//         }
-//         popup.classList.remove("hidden");
-
-//     }else{
-//         console.log("Closing popup");
-//         closePopup();
-
-//     }
-// });
 
 function showPlayPopup(){
     showPopup(playPopup, "play");
@@ -122,6 +111,11 @@ function showOptionsPopup(){
 function showHighScorePopup(){
     showPopup(highscorePopup, "highscore");
     updateHighScoreSpans();
+}
+
+function showGameOverPopup(){
+    showPopup(gameOverPopup, "gameover");
+    updateGameOverSpans();
 }
 
 function hideExitButton(){
