@@ -200,9 +200,9 @@
 
 			<nav>
 				<a id="exit-to-start-button" onclick="showStartScreen();">Main Menu</a>
-				<a id="instruction-button" onclick="showInstructionPopup(); closeMenu();">How to Play</a>
-				<a id="high-score-button" onclick="showHighScorePopup(); closeMenu();">High Scores</a>
-				<a id="option-button" onclick="showOptionsPopup(); closeMenu();">Options</a>
+				<a id="instruction-button" onclick="closeMenu(); showInstructionPopup();">How to Play</a>
+				<a id="high-score-button" onclick="closeMenu(); showHighScorePopup();">High Scores</a>
+				<a id="option-button" onclick="closeMenu(); showOptionsPopup();">Options</a>
 				<!-- <a id="reset-button" onclick="closePopup(); hideStatus(); resetGame(); closeMenu();">Reset</a> -->
 				<a id="install-button" class="hide-on-install" onclick="install();" hidden>Install</a>
 			</nav>

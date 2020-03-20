@@ -151,17 +151,9 @@ function showStartScreen(){
 	starting = true;
 	startScreen.classList.remove("hidden");
 
-	// window.removeEventListener("popstate", historyPopStateListener);
 	closeNextPopupState = true;
 	closeMenu();
-
-	// window.addEventListener("popstate", tempPopStateListener);
-	// function tempPopStateListener(e){
-	// 	window.removeEventListener("popstate", tempPopStateListener);
-	// 	window.addEventListener("popstate", historyPopStateListener);
-	// }
-
-
+	closePopup();
 }
 
 function hideStartScreen(){
@@ -524,7 +516,7 @@ function undoLastMove(){
 	let undoID = -1;
 	let undoPerformed = false;
 	do {
-		if (undoID === -1 || undoID === pastMoves[pastMoves.length - 1][1]){
+		if (pastMoves[pastMoves.length - 1] !== undefined && (undoID === -1 || undoID === pastMoves[pastMoves.length - 1][1])){
 			let lastMove = pastMoves.pop();
 
 			//Determine if full move

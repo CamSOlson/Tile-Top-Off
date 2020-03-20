@@ -3,6 +3,8 @@ var closeNextPopupState = false;
 window.addEventListener("popstate", historyPopStateListener);
 
 function historyPopStateListener(e){
+	closeNextPopupState = false;
+
 	switch (history.state){
 		default:
 			closePopup();
@@ -10,7 +12,6 @@ function historyPopStateListener(e){
 			if (gameOver){
 				showStartScreen();
 			}
-			closeNextPopupState = false;
 			break;
 		case "popup":
 			closeMenu();
@@ -25,8 +26,6 @@ function historyPopStateListener(e){
 				}
 				showPopup(lastPopup, lastPopupName);	
 			}
-			closeNextPopupState = false;
-
 			break;
 		case "menu":
 			showMenu();

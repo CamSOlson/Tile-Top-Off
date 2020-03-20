@@ -64,11 +64,10 @@ function showPopup(popupElem, popupName){
     disableGameInput();
     setPopup(popupElem);
     popup.classList.remove("hidden");
-    if (history.state !== "popup"){
-        if (history.state === "menu"){
-            history.back();
-        }
+    if (history.state === null){
         history.pushState("popup", popupName, window.location.href);
+    }else{
+        history.replaceState("popup", popupName, window.location.href);
     }
     showExitButton();
 }
