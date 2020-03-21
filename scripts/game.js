@@ -94,7 +94,7 @@ window.addEventListener("load", function(){
 		touchMove(gameBoard, e.clientX - rect.left - scrollLeft, e.clientY - rect.top - scrollTop);
 	});
 
-	swipeMovement(mainGame, function(swipeDir, held){
+	swipeMovement(gameBoard, function(swipeDir, held){
         if (swipeDir != "none"){
             switch (swipeDir){
 				case "up":
