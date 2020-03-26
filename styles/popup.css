@@ -69,6 +69,9 @@ section#popup>section#popup-content>section{
 h1{
     font-size: 2rem;
 }
+section#popup-content h1{
+	margin-bottom: 1rem;
+}
 h2{
 	font-size: 1.5rem;
 }
@@ -77,7 +80,6 @@ p{
 }
 span.control{
 	color: #888888;
-	font-style: italic;
 }
 
 div.slider-container{
@@ -122,6 +124,8 @@ figure.instruction-diagram{
 	display: flex;
 	flex-direction: row;
 	align-items: center;
+	justify-content: center;
+	flex-wrap: wrap;
 }
 figure.instruction-diagram img{
 	height: 10rem;
@@ -136,6 +140,87 @@ figure.instruction-diagram div.progression{
 	flex-direction: row;
 	align-items: center;
 	justify-content: center;
+}
+figure.instruction-diagram h3{
+	font-size: 1.5rem;
+}
+figure.instruction-diagram div.input{
+	display: grid;
+	grid-template-rows: auto auto;
+	grid-template-columns: auto auto;
+	gap: 1rem;
+	margin-bottom: 3rem;
+}
+figure.instruction-diagram div.input *{
+	margin: auto;
+}
+figure.instruction-diagram div.input div{
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+}
+div.input div.key-diagram{
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	flex-wrap: wrap;
+}
+figure.instruction-diagram figure.inverted-T-keys{
+	display: grid;
+	margin: 1rem;
+}
+figure.instruction-diagram p.T-key-divider{
+	font-size: 6rem;
+	line-height: 6rem;
+	height: 6rem;
+	margin: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+figure.instruction-diagram p.key-combo-indicator{
+	font-size: 4rem;
+	line-height: 4rem;
+	height: 4rem;
+	margin: 1rem;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+figure.instruction-diagram figure.inverted-T-keys>p, p.key{
+	background-color: #888888;
+	border-top: 0.25rem solid #888888;
+	border-left: 0.25rem solid #888888;
+	border-bottom: 0.25rem solid #333333;
+	border-right: 0.25rem solid #333333;
+	display: block;
+	min-width: 2rem;
+	min-height: 2rem;
+	font-size: 1rem;
+	line-height: 1.5rem;
+	margin: 0.25rem;
+	padding: 0.25rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+figure.instruction-diagram figure.inverted-T-keys>p:nth-child(1){
+	grid-row-start: 1;
+	grid-column-start: 2;
+}
+figure.instruction-diagram figure.inverted-T-keys>p:nth-child(2){
+	grid-row-start: 2;
+	grid-column-start: 1;
+}
+figure.instruction-diagram figure.inverted-T-keys>p:nth-child(3){
+	grid-row-start: 2;
+	grid-column-start: 2;
+}
+figure.instruction-diagram figure.inverted-T-keys>p:nth-child(4){
+	grid-row-start: 2;
+	grid-column-start: 3;
 }
 @media only screen and (max-width: 600px) {
 	section#popup>section#popup-content{
@@ -179,6 +264,9 @@ figure.instruction-diagram div.progression{
 		width: 3rem;
 		text-align: center;
 	}
+	section#instruction-content>p{
+		font-size: 0.75rem;
+	}
 	figure.instruction-diagram img{
 		height: 6rem;
 		margin: 0.5rem;
@@ -191,5 +279,37 @@ figure.instruction-diagram div.progression{
 		display: flex;
 		flex-direction: column;
 		align-items: center;
+	}
+	figure.instruction-diagram h3{
+		font-size: 1rem;
+	}
+	figure.instruction-diagram p.key-combo-indicator{
+		font-size: 2rem;
+		line-height: 2rem;
+		height: 2rem;
+		margin: 1rem;
+	}
+	figure.instruction-diagram p.T-key-divider{
+		font-size: 3rem;
+		line-height: 3rem;
+		height: 3rem;
+	}
+	figure.instruction-diagram div.input{
+		gap: 0.5rem;
+	}
+	figure.instruction-diagram figure.inverted-T-keys{
+		margin: 0.25rem;
+	}
+	figure.instruction-diagram figure.inverted-T-keys>p, p.key{
+		border-top: 0.1rem solid #888888;
+		border-left: 0.1rem solid #888888;
+		border-bottom: 0.1rem solid #333333;
+		border-right: 0.1rem solid #333333;
+		min-width: 1rem;
+		min-height: 1rem;
+		font-size: 0.75rem;
+		line-height: 0.8rem;
+		margin: 0.1rem;
+		padding: 0.1rem;
 	}
 }

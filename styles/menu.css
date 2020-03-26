@@ -1,0 +1,114 @@
+section#menu{
+	position: fixed;
+	right: 0;
+	top: 0;
+	z-index: 100;
+	background-color: none;
+	width: 0;
+	transition: 0.25s width, 0.25s background-color;
+}
+section#menu.open{
+	width: 20rem;
+	background-color: #333333;
+	height: 100%;
+}
+section#menu>nav{
+	transition: 0.25s opacity, 0.25s visibility, 0.25s transform;
+	opacity: 0;
+	visibility: hidden;
+	margin-top: 5rem;
+	height: calc(100% - 5rem);
+
+	display: flex;
+	flex-direction: column;
+
+	transform: scaleX(0);
+	transform-origin: right;
+
+	overflow-y: auto;
+}
+section#menu.open>nav{
+	opacity: 1;
+	visibility: visible;
+	transform: scaleX(1);
+}
+nav>a{
+	font-size: 1.5rem;
+	line-height: 1.5rem;
+	width: calc(100% - 1rem);
+	padding: 0.5rem 1rem 0.5rem 0rem;
+	text-align: right;
+	cursor: pointer;
+	white-space: nowrap;
+}
+a#install-button{
+	margin-top: auto;
+	line-height: 4rem;
+	background-color: #888888;
+}
+div#icon{
+	width: 3rem;
+	height: 3rem;
+	padding: 0.5rem;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+	cursor: pointer;
+	float: right;
+}
+div#icon>a{
+	width: 100%;
+	height: 0.25rem;
+	background-color: White;
+	/*border-radius: 0.25rem;*/
+}
+@media only screen and (max-width: 600px) {
+	div#icon{
+		width: 2rem;
+		height: 2rem;
+		padding: 0.5rem;
+	}
+	section#menu{
+		width: 0rem;
+	}
+	section#menu>nav{
+		height: calc(100vh - 5rem);
+	}
+	div#icon>a{
+		height: 0.2rem;
+		width: 2rem;
+	}
+	section#menu.open{
+		width: 10rem;
+	}
+	nav>a{
+		font-size: 1rem;
+		line-height: 1rem;
+	}
+	a#install-button{
+		line-height: 3rem;
+	}
+}
+
+div#hold-indicator{
+	transition: 0.25s width, 0.25s height, 0.25s top, 0.25s left, 0.25s opacity;
+	position: fixed;
+	width: 0;
+	height: 0;
+	opacity: 0;
+	top: 0;
+	left: 0;
+	background-color: #ffffff;
+	border-radius: 50%;
+	touch-action: none;
+	pointer-events: none;
+	z-index: 50;
+	overflow: hidden;
+}
+div#hold-indicator.active{
+	width: 7rem;
+	height: 7rem;
+	opacity: 0.75;
+	top: -3.5rem;
+	left: -3.5rem;
+}

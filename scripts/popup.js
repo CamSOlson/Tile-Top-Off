@@ -64,7 +64,7 @@ function showPopup(popupElem, popupName){
     disableGameInput();
     setPopup(popupElem);
     popup.classList.remove("hidden");
-    if (history.state === null){
+    if (history.state === null || history.state === "game"){
         history.pushState("popup", popupName, window.location.href);
     }else{
         history.replaceState("popup", popupName, window.location.href);

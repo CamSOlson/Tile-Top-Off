@@ -1,0 +1,96 @@
+section#start-screen{
+	transition: 0.25s opacity, 0.25s visibility, 0.25s z-index;
+	opacity: 1;
+	visibility: visible;
+	width: 100vw;
+	max-width: 100%;
+	height: 100vh;
+	max-height: 100%;
+	background-color: Black;
+	color: White;
+	z-index: 3;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	position: relative;
+	overflow-y: auto;
+}
+section#start-screen.hidden{
+	opacity: 0;
+	visibility: hidden;
+	pointer-events: none;
+	touch-action: none;
+	z-index: -1;
+	position: absolute;
+}
+section#start-screen>h1{
+	margin-top: auto;
+	margin-bottom: 0.5rem;
+}
+section#start-screen>a{
+	margin-bottom: 2rem;
+	font-size: 0.8rem;
+	text-decoration: none;
+}
+section#start-screen>nav{
+	margin-bottom: auto;
+	display: flex;
+	flex-direction: column;
+	max-width: 20rem;
+	width: calc(100% - 2rem);
+	position: relative;
+	padding: 0;
+}
+section#start-screen button{
+	width: 100%;
+}
+button{
+	cursor: pointer;
+	margin: 0.5rem 0 0.5rem 0;
+	font-size: 1rem;
+	outline: none;
+	border: none;
+	background-color: #333333;
+	color: White;
+	line-height: 2rem;
+	position: relative;
+}
+div.play-options{
+	display: flex;
+	flex-direction: column;
+}
+button#start-play{
+	height: 4rem;
+}
+section#quick-play-difficulties{
+	display: flex;
+	flex-direction: row;
+}
+section#quick-play-difficulties button{
+	width: 6rem;
+}
+button#start-quick-play-easy{
+	background-color: MediumSpringGreen;
+}
+button#start-quick-play-norm{
+	background-color: RoyalBlue;
+}
+button#start-quick-play-hard{
+	background-color: Crimson;
+}
+button#start-custom-game{
+	background-color: #888888;
+}
+div#start-install-prompt{
+	margin: 2rem 0 0 0;
+	text-align: center;
+	width: 100%;
+}
+div#start-install-prompt p{
+	margin: 0.5rem 0 0.5rem 0;
+	font-size: 0.75rem;
+}
+div#start-install-prompt button#start-install{
+	background-color: #888888;
+	width: 100%;
+}

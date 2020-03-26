@@ -16,6 +16,8 @@
 		<link rel="stylesheet" href="/styles/sliders.css">
 		<link rel="stylesheet" href="/styles/scrollbar.css">
 		<link rel="stylesheet" href="/styles/popup.css">
+		<link rel="stylesheet" href="/styles/start.css">
+		<link rel="stylesheet" href="/styles/menu.css">
 		<link rel="stylesheet" href="/styles/toggle-switches.css">
 		<link rel="icon" href="/media/images/icons/icon-64x64.png">
 		<link rel="manifest" href="/public/manifest.json">
@@ -117,24 +119,73 @@
 				<section id="instruction-content" style="display: none;">
 					<h1>How to Play</h1>
 					<h2>Movement</h2>
-					<p>Use <span class="control">[W][A][S][D]</span>, the <span class="control">Arrow Keys</span>, or <span class="control">Tap</span> on the board in the direction you want to move in.</p>
+					<p>Use <span class="control">[W][A][S][D]</span>, the <span class="control">Arrow Keys</span>, or <span class="control">Swipe</span> the board in the direction you want to move in.</p>
 					<figure class="instruction-diagram">
-						<img src="../media/images/move-diagram.png" alt="Basic movement">
-						<span style="width: 3rem"></span>
-						<div class="progression">
-							<img src="../media/images/example-board.png" alt="Before move">
-							<a>🡆</a>
-							<img src="../media/images/example-board-move.png" alt="After move">    
+						<div class="input">
+							<h3>Keyboard</h3>
+							<div class="key-diagram">
+								<figure class="inverted-T-keys">
+									<p>W</p>
+									<p>A</p>
+									<p>S</p>
+									<p>D</p>
+								</figure>
+								<p class="T-key-divider">/</p>
+								<figure class="inverted-T-keys">
+									<p>&uarr;</p>
+									<p>&larr;</p>
+									<p>&darr;</p>
+									<p>&rarr;</p>
+								</figure>	
+							</div>
+							<h3>Touch Screen</h3>
+							<img src="/media/images/swipe-move.png" alt="Swipe to move">	
+						</div>
+						
+						<div class="progression" style="flex-basis:100%;flex-shrink:0;">
+							<img src="../media/images/example-board-new.png" alt="Before move">
+							<a>&rArr;</a>
+							<img src="../media/images/example-board-move-new.png" alt="After move">    
 						</div>
 					</figure>
-					<p>Hold <span class="control">[SHIFT]</span> while moving or <span class="control">Swipe</span> in the direction you want to move in to continuously move in that direction, filling in all empty spaces until you hit an obstacle or your path.</p>
+					<p>Hold <span class="control">[SHIFT]</span> while moving or <span class="control">Tap and Hold Before Swiping</span> in the direction you want to move in to continuously move in that direction, filling in all empty spaces until you hit an obstacle or your path.
+					When holding, a white circle will appear where your finger is to indicate the action is ready.</p>
 					<figure class="instruction-diagram">
-						<img src="../media/images/full-move-diagram.png" alt="Fill move">
-						<span style="width: 3rem"></span>
-						<div class="progression">
-							<img src="../media/images/example-board.png" alt="Before move">
+						<div class="input">
+							<h3>Keyboard</h3>
+							<div class="key-diagram">
+								<div style="flex-basis:100%;flex-grow:0;">
+									<p class="key" style="padding-left:2rem;padding-right:2rem;margin-left:auto;margin-right:1rem;">Shift</p>
+									<p class="key-combo-indicator" style="margin-right:auto;margin-left:0;">+</p>	
+								</div>
+								<div style="flex-basis:100%">
+									<figure class="inverted-T-keys">
+										<p>W</p>
+										<p>A</p>
+										<p>S</p>
+										<p>D</p>
+									</figure>
+									<p class="T-key-divider">/</p>
+									<figure class="inverted-T-keys">
+										<p>&uarr;</p>
+										<p>&larr;</p>
+										<p>&darr;</p>
+										<p>&rarr;</p>
+									</figure>		
+								</div>
+							</div>
+							<h3>Touch Screen</h3>
+							<div>
+								<img src="/media/images/hold.png" alt="Hold before swiping">
+								<span style="width:1rem"></span>
+								<img src="/media/images/swipe-move.png" alt="Swipe to move">	
+							</div>
+						</div>
+
+						<div class="progression" style="flex-basis:100%;flex-shrink:0;">
+							<img src="../media/images/example-board-new.png" alt="Before move">
 							<a>🡆</a>
-							<img src="../media/images/example-board-fill-move.png" alt="After move">    
+							<img src="../media/images/example-board-fill-move-new.png" alt="After move">    
 						</div>
 					</figure>
 					<h2>Goal</h2>
