@@ -64,11 +64,6 @@ function showPopup(popupElem, popupName){
     disableGameInput();
     setPopup(popupElem);
     popup.classList.remove("hidden");
-    if (history.state === null || history.state === "game"){
-        history.pushState("popup", popupName, window.location.href);
-    }else{
-        history.replaceState("popup", popupName, window.location.href);
-    }
     showExitButton();
 }
 
@@ -88,10 +83,6 @@ function closeAllPopups(){
 function closePopup(){
     enableGameInput();
     popup.classList.add("hidden");
-
-    if (history.state === "popup"){
-        history.back();
-    }
 }
 
 function showPlayPopup(){

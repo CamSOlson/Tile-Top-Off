@@ -1,23 +1,7 @@
-var tileSize = "100%";
-
-var tilesWide = 5;
-var customBoardSize = 5;
-var tilesTall = 5;
-var obstacles = 0;
-var tilesFilled = 0;
-var pathComplexity = 0.5;
-var customPathComplexity = 0.5;
-
 var tiles = [[]];
-var pastMoves = [[]];
 var playerTile;
 var startPos;
 var path;
-
-var defaultTileColor = "#333333";
-var obstacleTileColor = "#888888";
-var playerColors = ["#ff2626", "#ff9326", "#ffff00", "#00ff40", "#0080ff", "#9326ff", "#ff73ff"];
-var playerTileColor = playerColors[0];
 
 var statusDiv;
 var statusMain;
@@ -49,8 +33,6 @@ var resetRefreshLabel;
 var resetRefreshCount;
 var resetButton;
 
-var undoDirection = -1;
-var undos;
 var resetAvailable = true;
 var resetRefresh = 0;
 var resetRefreshWait = 5;
@@ -324,54 +306,29 @@ function getAdjacentTiles(x, y){
 	}else{
 		adjTiles.push(undefined);
 	}
-		//Right
-		if (x < tilesWide - 1){
-			adjTiles.push(tiles[x + 1][y]);
-		}else{
-			adjTiles.push(undefined);
-		}
-			//Below
+	//Right
+	if (x < tilesWide - 1){
+		adjTiles.push(tiles[x + 1][y]);
+	}else{
+		adjTiles.push(undefined);
+	}
+	//Below
 	if (y < tilesTall - 1){
 		adjTiles.push(tiles[x][y + 1]);
 	}else{
 		adjTiles.push(undefined);
 	}
-		//Left
-		if (x > 0){
-			adjTiles.push(tiles[x - 1][y]);
-		}else{
-			adjTiles.push(undefined);
-		}
-
-
-
+	//Left
+	if (x > 0){
+		adjTiles.push(tiles[x - 1][y]);
+	}else{
+		adjTiles.push(undefined);
+	}
 	return adjTiles;
 }
 
 function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));
-}
-
-function touchMove(element, x, y){
-	//check if closer to x or y axis
-	if (Math.abs(y - element.offsetHeight / 2) > Math.abs(x - element.offsetWidth / 2)){
-		//Closer to y axis
-		if (y > element.offsetHeight / 2){
-			//down
-			update(40);
-		}else{
-			update(38);
-		}
-	}else{
-		//Closer to x axis
-		if (x > element.offsetWidth / 2){
-			//right
-			update(39);
-		}else{
-			//left
-			update(37);
-		}
-	}
 }
 
 function update(key, shift){
@@ -487,66 +444,6 @@ function updateResetRefresh(){
 	updateGameActionButtons();
 }
 
-function setUndoDirection(){
-	undoDirection = -1;
-	let prevMove = pastMoves[pastMoves.length - 1];
-	if (prevMove !== undefined){
-		prevMove = prevMove[0].split(", ");
-		let prevPos = [Number(prevMove[0]), Number(prevMove[1])];
-		let playerPos = [Number(playerTile.dataset.x), Number(playerTile.dataset.y)];
-		if (prevPos[0] > playerPos[0]){
-			//Right
-			undoDirection = 1;
-		}else if (prevPos[0] < playerPos[0]){
-			//Left
-			undoDirection = 3;
-		}else if (prevPos[1] > playerPos[1]){
-			//Down
-			undoDirection = 2;
-		}else{
-			//Up
-			undoDirection = 0;
-		}
-	}
-	
-}
-
-function undoLastMove(){
-	let undoFullMove = false;
-	let undoID = -1;
-	let undoPerformed = false;
-	do {
-		if (pastMoves[pastMoves.length - 1] !== undefined && (undoID === -1 || undoID === pastMoves[pastMoves.length - 1][1])){
-			let lastMove = pastMoves.pop();
-
-			//Determine if full move
-			undoFullMove = lastMove[2];	
-			let lastMoveRaw = lastMove[0].split(", ");
-			let lastPos = [Number(lastMoveRaw[0]), Number(lastMoveRaw[1])];
-
-			let prevTile = tiles[lastPos[0]][lastPos[1]];
-			prevTile.dataset.tiletype = "empty";
-			prevTile.style.backgroundColor = defaultTileColor;
-			prevTile.style.backgroundImage = "none";
-
-			switchTiles(prevTile, playerTile);
-
-			tilesFilled--;
-
-			undoID = lastMove[1];
-			undoPerformed = true;
-		}else{
-			undoFullMove = false;
-		}
-	} while (undoFullMove);
-
-	if (undoPerformed){
-		undos--;
-	}
-
-	updateGameActionButtons();
-}
-
 function fadeToNewStage(){
 	let cloneBoard = tileDiv.cloneNode(true);
 	cloneBoard.setAttribute("id", "fade-board");
@@ -566,179 +463,6 @@ function enableGameInput(){
 
 function disableGameInput(){
 	blockInput = true;
-}
-
-function move(direction, allTheWay){
-	let moveID = pastMoves.length;
-	let moved = false;
-	do {
-		let adjacentTiles = getAdjacentTiles(playerTile.dataset.x, playerTile.dataset.y);
-		if (adjacentTiles[direction] !== undefined){
-			let fullMove = allTheWay;
-			let playerMoved = movePlayer(playerTile, adjacentTiles[direction]);
-			allTheWay = playerMoved && allTheWay;
-			if (playerMoved){
-				pastMoves.push([adjacentTiles[direction].dataset.x + ", " + adjacentTiles[direction].dataset.y, moveID, fullMove]);
-				moved = true;
-			}
-		}else{
-			allTheWay = false;
-		}
-	} while (allTheWay);
-	
-	if (moved){
-		playSound(moveTileSound);
-	}else{
-		playSound(blockedTileSound);
-	}
-}
-
-function movePlayer(playerTile, targetTile){
-	//Make sure target is empty
-	if (targetTile.dataset.tiletype === "empty"){
-		tilesFilled++;
-		//Switch tiles
-		switchTiles(playerTile, targetTile);
-		//Set other tile to a "used" tile
-		targetTile.dataset.tiletype = "used";
-
-		let fromColor = getUsedTileColor(tilesFilled);
-		let toColor = getUsedTileColor(tilesFilled + 1);
-		let playerPos = [Number(playerTile.dataset.x), Number(playerTile.dataset.y)];
-		let currPos = [Number(targetTile.dataset.x), Number(targetTile.dataset.y)];
-		if (playerPos[0] > currPos[0]){
-			//Right
-			toSide = 1;
-		}else if (playerPos[0] < currPos[0]){
-			//Left
-			toSide = 3;
-		}else if (playerPos[1] > currPos[1]){
-			//Down
-			toSide = 2;
-		}else{
-			//Up
-			toSide = 0;
-		}
-		let prevMove = pastMoves[pastMoves.length - 1];
-		let fromSide = 0;
-		let toSize = 0;
-		let gradient;
-		if (prevMove !== undefined){
-			//Middle of path
-			prevMove = prevMove[0].split(", ");
-			let prevPos = [Number(prevMove[0]), Number(prevMove[1])];
-
-
-			if (prevPos[0] > currPos[0]){
-				//Right
-				fromSide = 1;
-			}else if (prevPos[0] < currPos[0]){
-				//Left
-				fromSide = 3;
-			}else if (prevPos[1] > currPos[1]){
-				//Down
-				fromSide = 2;
-			}else{
-				//Up
-				fromSide = 0;
-			}
-
-			gradient = createGradient(fromSide, toSide, fromColor, toColor);
-		}else{
-			//Beginning of path
-			fromSide = toSide - 2;
-			while (fromSide < 0){
-				fromSide += 4;
-			}
-			gradient = createGradient(fromSide, toSide, fromColor, toColor);
-		}
-
-		targetTile.style.backgroundColor = getUsedTileColor(tilesFilled);
-		//targetTile.style.backgroundImage = "conic-gradient(at 100% 0%, Red 50%, Blue 75%)";
-		targetTile.style.backgroundImage = gradient;
-		return true;
-	}else{
-		return false;
-	}
-}
-
-function createGradient(fromSide, toSide, fromColor, toColor){
-	switch (fromSide){
-		case 0:
-			//From top
-			switch (toSide){
-				case 1:
-					//To right
-					return "conic-gradient(at 100% 0%, " + toColor + " 50%, " + fromColor + " 75%)";
-				case 2:
-					//To bottom
-					return "linear-gradient(to bottom, " + fromColor + ", " + toColor + ")";
-				case 3:
-					//To left
-					return "conic-gradient(at 0% 0%, " + fromColor + " 25%, " + toColor + " 50%)";
-			}
-			break;
-		case 1:
-			//From right
-			switch (toSide){
-				case 0:
-					//To top
-					return "conic-gradient(at 100% 0%, " + fromColor + " 50%, " + toColor + " 75%)";
-				case 2:
-					//To bottom
-					return "conic-gradient(at 100% 100%, " + toColor + " 75%, " + fromColor + " 100%)";
-				case 3:
-					//To left
-					return "linear-gradient(to left, " + fromColor + ", " + toColor + ")";
-			}
-			break;
-		case 2:
-			//From bottom
-			switch (toSide){
-				case 0:
-					//To top
-					return "linear-gradient(to top, " + fromColor + ", " + toColor + ")";
-				case 1:
-					//To right
-					return "conic-gradient(at 100% 100%, " + fromColor + " 75%, " + toColor + " 100%)";
-				case 3:
-					//To left
-					return "conic-gradient(at 0% 100%, " + toColor + " 0%, " + fromColor + " 25%)";
-			}
-			break;
-		case 3:
-			//From left
-			switch (toSide){
-				case 0:
-					//To top
-					return "conic-gradient(at 0% 0%, " + toColor + " 25%, " + fromColor + " 50%)";
-				case 1:
-					//To right
-					return "linear-gradient(to right, " + fromColor + ", " + toColor + ")";
-				case 2:
-					//To bottom
-					return "conic-gradient(at 0% 100%, " + fromColor + " 0%, " + toColor + " 25%)";
-			}
-			break;
-	}
-	return "linear-gradient(" + fromColor + ", " + toColor + ")";
-}
-
-function getUsedTileColor(moveNumber){
-	let max = tilesWide * tilesTall - obstacles;
-	let percentage = moveNumber / max;
-	percentage = percentage / 2 + 0.5;
-	let rgb = hexToRGB(playerTileColor);
-	return "rgba(" + Math.min(255, (percentage * rgb.r) * 0.75) + ", " + Math.min(255, (percentage * rgb.g) * 0.75) + ", " + Math.min(255, (percentage * rgb.b) * 0.75) + ", 255)";
-}
-
-function hexToRGB(hex) {
-	let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-	return result ? {
-		r: parseInt(result[1], 16),
-		g: parseInt(result[2], 16),
-		b: parseInt(result[3], 16)
-	}: null;
 }
 
 function switchTiles(tile1, tile2){
@@ -808,253 +532,3 @@ function hideStatus(){
 	statusSub.classList.remove("status-shown");
 	statusSub.classList.add("status-hidden");
 }
-
-function swipeMovement(element, callback){
-	let touchElem = element;
-	let swipeDir, startX, startY, distX, distY, 
-	threshold = 50, //min dist
-    restraint = 50, //max deviation
-	allowedTime = 300, //max time
-	holdTime = 250, //Time to hold for full move
-	holdThreshold = 10, //Num of pixels user can move while counting as holding
-	holdSwipeEvent, holdSwipe = false, elapsedTime, startTime,
-    swipeEvent = callback || function(swipeDir, held){};
-  
-    touchElem.addEventListener("touchstart", function(e){
-        let touchobj = e.changedTouches[0];
-        swipeDir = "none";
-        dist = 0;
-        startX = touchobj.pageX;
-		startY = touchobj.pageY;
-		distX = 0;
-		distY = 0;
-		startTime = new Date().getTime();
-		holdSwipeEvent = setTimeout(function(){
-			holdSwipe = true;
-			holdIndicator.classList.add("active");
-		}, holdTime);
-		updateHoldIndicator();
-		holdSwipe = false;
-    }, {passive: true});
-  
-    touchElem.addEventListener("touchmove", function(e){
-		e.preventDefault();
-
-		var touchobj = e.changedTouches[0]
-        distX = touchobj.pageX - startX;
-        distY = touchobj.pageY - startY;
-		elapsedTime = new Date().getTime() - startTime;
-
-		updateHoldIndicator();
-
-		if (Math.sqrt(Math.pow(distX, 2) + Math.pow(distY, 2)) > holdThreshold){
-			if (holdSwipe){
-				startTime = new Date().getTime();
-			}else{
-				clearTimeout(holdSwipeEvent);
-				holdIndicator.classList.remove("active");
-				holdSwipe = false;
-			}
-		}
-	});
-  
-    touchElem.addEventListener("touchend", function(e){
-		clearTimeout(holdSwipeEvent);
-		holdIndicator.classList.remove("active");
-        var touchobj = e.changedTouches[0]
-        distX = touchobj.pageX - startX;
-        distY = touchobj.pageY - startY;
-		elapsedTime = new Date().getTime() - startTime;
-		updateHoldIndicator();
-		if (elapsedTime <= allowedTime){
-			if (Math.abs(distX) >= threshold && Math.abs(distY) <= restraint){
-				swipeDir = (distX < 0)? "left" : "right";
-			}
-			else if (Math.abs(distY) >= threshold && Math.abs(distX) <= restraint){
-				swipeDir = (distY < 0)? "up" : "down";
-			}
-		}	
-		swipeEvent(swipeDir, holdSwipe);
-		holdSwipe = false;
-	}, {passive: true});
-
-	function updateHoldIndicator(){
-		holdIndicator.style.transform = "translate(" + (startX + distX) + "px, " + (startY + distY) + "px)";
-	}
-}
-
-//Tile generator
-
-function generateTiles() {
-	tilesTall = tilesWide;
-	tilesFilled = 0;
-	tileSize = (100 / tilesWide);
-	resetUndo();
-	updateGameActionButtons();
-	
-	let prevColor = playerTileColor;
-	while (playerTileColor == prevColor){
-		playerTileColor = playerColors[getRandomInt(playerColors.length)];
-	}
-	let playerInstruction = document.querySelector("span#player-instructions");
-	if (playerInstruction != null){
-		playerInstruction.style.color = playerTileColor;
-	}
-	
-	let boardColumns = "";
-	let boardRows = "";
-	
-	//Clear board
-	tileDiv.innerHTML = "";
-	tiles = [];
-	pastMoves = [];
-	//Populate game board with tiles. Iterate through tile width and height
-	for (let x = 0; x < tilesWide; x++){
-		boardColumns += " " + tileSize;
-		let col = [];
-		for (let y = 0; y < tilesTall; y++){
-			let tile = document.createElement("a");
-			tile.classList.add("tile");
-			tile.dataset.x = x;
-			tile.dataset.y = y;
-			tileDiv.appendChild(tile);	
-			tile.style.left = (tileSize * x) + "%";
-			tile.style.top = (tileSize * y) + "%";
-			tile.style.width = (Number(tileSize) + 0.01) + "%";
-			tile.style.height = (Number(tileSize) + 0.01) + "%";
-
-			col.push(tile);
-		}
-		tiles[x] = col;
-	}
-	//tiles.pop();
-	
-	//Make the styling rule for the columns since it was too messy to do before
-	for (let y = 0; y < tilesTall; y++){
-		boardRows += " " + tileSize;
-	}
-	//Reset all tiles to obstacle tiles
-	for (let x = 0; x < tiles.length; x++){
-		for (let y = 0; y < tiles[x].length; y++){
-			tiles[x][y].dataset.tiletype = "obstacle";
-			tiles[x][y].style.backgroundColor = obstacleTileColor;
-		}
-	}
-	
-	//Generate a random location for the player tile
-	let x = getRandomInt(tilesWide - 1);
-	let y = getRandomInt(tilesTall - 1);
-	tiles[x][y].dataset.tiletype = "player";
-	tiles[x][y].style.backgroundColor = playerTileColor;
-	playerTile = tiles[x][y];
-	startPos = [x, y];
-	//Make random moves to empty spaces until there are no moves to make.
-	let visitedMap = [[]];
-	for (let i = 0; i < tilesWide; i++){
-		visitedMap[i] = [];
-		for (let i2 = 0; i2 < tilesTall; i2++){
-			visitedMap[i][i2] = false;
-		}
-	}
-	visitedMap[x][y] = true;
-	let tilesGenerated = 0;
-	let pathSequence = [[x, y]];
-	let invalidMoves = {};
-	let reset = false;
-	let timeElapsed = 0;
-	while (tilesGenerated < Math.round((tilesWide * tilesTall) * Math.min(1, pathComplexity))) {
-		let startTime = new Date();
-		let currentMap = obstacleMapToString(visitedMap);
-		let invalidDirections = invalidMoves[currentMap];
-		let openDirections = [y - 1 >= 0 && visitedMap[x][y - 1] === false && (invalidDirections === undefined ? true : !invalidDirections.includes(x + "," + (y - 1))),
-			y + 1 < tilesTall && visitedMap[x][y + 1] === false && (invalidDirections === undefined ? true : !invalidDirections.includes(x + "," + (y + 1))),
-			x - 1 >= 0 && visitedMap[x - 1][y] === false && (invalidDirections === undefined ? true : !invalidDirections.includes((x - 1) + "," + y)),
-			x + 1 < tilesWide && visitedMap[x + 1][y] === false && (invalidDirections === undefined ? true : !invalidDirections.includes((x + 1) + "," + y))];
-		if (openDirections.includes(true)){
-			//A direction is open, make a random move
-			//Create an array of the different directions that can be moved in
-			let validDirections = [];
-			for (let i = 0; i < openDirections.length; i++){
-				if (openDirections[i]){
-					validDirections.push(i);
-				}
-			}
-			switch (validDirections[getRandomInt(validDirections.length)]){
-				case 0:
-					y--;
-					visitedMap[x][y] = true;
-					tilesGenerated++;
-					break;
-				case 1:
-					y++;
-					visitedMap[x][y] = true;
-					tilesGenerated++;
-					break;
-				case 2:
-					x--;
-					visitedMap[x][y] = true;
-					tilesGenerated++;
-					break;
-				case 3:
-					x++;
-					visitedMap[x][y] = true;
-					tilesGenerated++;
-					break;
-				default:
-					break;
-			}
-			pathSequence.push([x, y]);
-		}else{
-			//No directions are open, back up
-			let prevEnd = pathSequence.pop();
-			visitedMap[prevEnd[0]][prevEnd[1]] = false;
-			x = pathSequence[pathSequence.length - 1][0];
-			y = pathSequence[pathSequence.length - 1][1];
-			tilesGenerated--;
-
-			let invalidMap = obstacleMapToString(visitedMap);
-			if (invalidMoves[invalidMap] === undefined){
-				invalidMoves[invalidMap] = [];
-			}
-			invalidMoves[invalidMap].push(prevEnd[0] + "," + prevEnd[1]);
-		}
-
-		timeElapsed += new Date() - startTime;
-
-		if (timeElapsed > 10000){
-			reset = confirm("The current level is taking a while to generate, would you like to start again?");
-		}
-
-		if (reset){
-			generateTiles();
-			return;
-		}
-	}
-	obstacles = tilesWide * tilesTall - 1;
-	//Adequate path generated, set the real tile map
-	for (let xCoord = 0; xCoord < tiles.length; xCoord++){
-		for (let yCoord = 0; yCoord < tiles[x].length; yCoord++){
-			if (visitedMap[xCoord][yCoord] && tiles[xCoord][yCoord].dataset.tiletype === "obstacle"){
-				tiles[xCoord][yCoord].dataset.tiletype = "empty";
-				tiles[xCoord][yCoord].style.backgroundColor = defaultTileColor;
-				obstacles--;
-			}
-		}
-	}
-
-	//Add grid styling to game board to size tiles in the grid
-	tileDiv.style.gridTemplateColumns = boardColumns;
-	tileDiv.style.gridTemplateRows = boardRows;
-}
-
-function obstacleMapToString(visitedMap){
-	let str = "";
-	for (let x = 0; x < visitedMap.length; x++){
-		for (let y = 0; y < visitedMap[x].length; y++){
-			str += (visitedMap[x][y] ? "1": "0");
-		}
-	}
-	return str;
-}
-
-

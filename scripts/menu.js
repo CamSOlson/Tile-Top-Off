@@ -14,14 +14,8 @@ function toggleMenu(){
 
 function closeMenu(){
     menu.classList.remove("open");
-    if (history.state === "menu"){
-        history.back();
-    }
 }
 
 function showMenu(){
     menu.classList.add("open");
-    if (history.state !== "menu"){
-        history.pushState("menu", "menu", window.location.href);
-    }
 }

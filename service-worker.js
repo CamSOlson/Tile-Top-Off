@@ -2,7 +2,7 @@ const CACHE_NAME = "TTF_0.1";
 const FILES_TO_CACHE = [
 	"/", "/service-worker.js", "/public/manifest.json", "/index.html", 
 	"/styles/main.css", "/styles/popup.css", "/styles/scrollbar.css", "/styles/start.css", "/styles/sliders.css", "/styles/toggle-switches.css",
-		"/styles/menu.css", "/styles/start.css",
+		"/styles/menu.css",
 	"/scripts/storage.js", "/scripts/game.js", "/scripts/menu.js", "/scripts/popup.js", "/scripts/menus/options.js", "/scripts/install.js",
 		"/scripts/menus/start.js", "/scripts/audio.js", "/scripts/history.js", "/scripts/menus/gameover.js",
 	"/media/images/example-board-fill-move.png", "/media/images/example-board-move.png", "/media/images/example-board-path.png",
